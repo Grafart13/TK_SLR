@@ -9,9 +9,9 @@ public class Symbol {
 
     public Symbol (char _sign) {
        if (Character.isUpperCase(_sign)) {
-            type = Type.NONTERMINAL;
+            this.type = Type.NONTERMINAL;
         } else {
-           type = Type.TERMINAL;
+           this.type = Type.TERMINAL;
        }
        this.sign = _sign;
     }
