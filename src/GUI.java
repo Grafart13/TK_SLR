@@ -1,3 +1,5 @@
+import heart.Grammar;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -32,6 +34,10 @@ public class GUI extends JFrame {
                 /*
                 Start algorithm of  generate parsing rules
                  */
+
+                Grammar grammar = new Grammar();
+                String text = grammarIn.getText();
+                grammar.parseAll(text);
 
             } else if (e.getSource() == simulate_button) {
                 System.out.println("Starting simulating algorithm...");
