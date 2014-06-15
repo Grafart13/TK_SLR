@@ -35,7 +35,7 @@ public class GUI extends JFrame {
                 Start algorithm of  generate parsing rules
                  */
 
-                Grammar grammar = new Grammar();
+//                Grammar grammar = new Grammar();
                 String text = grammarIn.getText();
 //                grammar.parseAll(text);
 

@@ -20,8 +20,6 @@ public class GrammarParser {
     public Grammar parse(String input) throws Exception {
 
 
-
-
         int lineNumber = 0;
         for (String line : input.split("\n")) {
             if (line.replace(" ", "").equals("")) {
@@ -36,11 +34,17 @@ public class GrammarParser {
             if (line.indexOf(Grammar.NEXT_PROD) != -1 && line.indexOf(Grammar.PRODUCTION_SIGN) > line.indexOf(Grammar.NEXT_PROD)) {
                 throw new Exception("Line nr " + lineNumber + " contains " + Grammar.NEXT_PROD + " sign before " + Grammar.PRODUCTION_SIGN + " sign.");
             }
-
+            // trimming
+            line = line.trim();
 
             String[] productionSides = line.split(Grammar.PRODUCTION_SIGN);
             // productionSides[0] - before -> sign.
             // productionSides[1] - after -> sing.
+
+            // trimming
+           for (int i=0; i<productionSides.length; i++) {
+            productionSides[i] = productionSides[i].trim();
+           }
 
             // getting nonterminals
             nonterminals.add(productionSides[0]); // -----
@@ -55,7 +59,13 @@ public class GrammarParser {
             // todo: test for " " occurence or sth. similar
 
             // split right sides by | sign
-            String[] rightSides = productionSides[1].split(Grammar.NEXT_PROD);
+            String[] rightSides = productionSides[1].split("\\" + Grammar.NEXT_PROD);
+
+            // trimming
+            for (int i=0; i<rightSides.length; i++) {
+                rightSides[i] = rightSides[i].trim();
+            }
+
             List<String> sides = new ArrayList<String>();
             for (String rightSide : rightSides) {
                 sides.add(rightSide);
@@ -68,13 +78,13 @@ public class GrammarParser {
 
         removeDuplicatedSymbols();
 
-        // todo: create and return result Grammar
-
-        return null;
+        return new Grammar(productions, terminals, nonterminals);
     }
 
     private void removeDuplicatedSymbols() {
         nonterminals = new ArrayList<String>(new LinkedHashSet<String>(nonterminals));
+        terminals = new ArrayList<String>(new LinkedHashSet<String>(terminals));
+
     }
 
     // todo: test for " " occurence or sth. similar
@@ -83,7 +93,7 @@ public class GrammarParser {
             for (String rightSide : prodRightSides.get(i)) {
                 Production production = new Production(nonterminals.get(i), Arrays.asList(rightSide.split(" ")));
                 if (productions.contains(production)) {
-                    throw new Exception("Duplicated production + " + production);
+                    throw new Exception("Duplicated production " + production);
                 }
                 productions.add(production);
                 // collect terminals
@@ -104,11 +114,5 @@ public class GrammarParser {
         }
     }
 
-    private void addNonterminal(String nonterminal) {
-        if (!nonterminals.contains(nonterminal)) {
-            nonterminals.add(nonterminal);
-        }
-
-    }
 
 }

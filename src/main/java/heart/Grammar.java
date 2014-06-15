@@ -18,9 +18,9 @@ public class Grammar {
     public final static String DOLLAR = "$";
     public final static String PRIM = "'";
 
-    private final List<Production> prods = new ArrayList<Production>();
-    private final List<String> terminals = new ArrayList<String>();
-    private final List<String> nonterminals = new ArrayList<String>();
+    private final List<Production> prods;// = new ArrayList<Production>();
+    private final List<String> terminals;// = new ArrayList<String>();
+    private final List<String> nonterminals;// = new ArrayList<String>();
 
 
 
@@ -29,12 +29,30 @@ public class Grammar {
     List<Goto> gotos;
     int numberOfProduction;
 
-    public Grammar() {
-        productions = new HashMap<Integer, Production>();
-        numberOfProduction =0;
-        gotos = new ArrayList<Goto>();
-        follows = new HashMap<Symbol, List<Symbol>>();
+    public Grammar(List<Production> prods, List<String> terminals, List<String> nonterminals) {
+        this.prods = prods;
+        this.terminals = terminals;
+        this.nonterminals = nonterminals;
     }
+
+    public List<Production> getProds() {
+        return prods;
+    }
+
+    public List<String> getTerminals() {
+        return terminals;
+    }
+
+    public List<String> getNonterminals() {
+        return nonterminals;
+    }
+
+    //    public Grammar() {
+//        productions = new HashMap<Integer, Production>();
+//        numberOfProduction =0;
+//        gotos = new ArrayList<Goto>();
+//        follows = new HashMap<Symbol, List<Symbol>>();
+//    }
 
 //    protected void addZeroProduction(Production prod) {
 //        String line = "S'->";
