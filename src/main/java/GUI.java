@@ -37,7 +37,7 @@ public class GUI extends JFrame {
 
                 Grammar grammar = new Grammar();
                 String text = grammarIn.getText();
-                grammar.parseAll(text);
+//                grammar.parseAll(text);
 
             } else if (e.getSource() == simulate_button) {
                 System.out.println("Starting simulating algorithm...");
