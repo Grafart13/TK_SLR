@@ -1,21 +1,23 @@
 package heart;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Mateusz Drożdż
  */
+
+/**
+ * First/Follow explanation:
+ * http://www.jambe.co.nz/UNI/FirstAndFollowSets.html
+ */
 public class ParserGenerator {
     private Grammar grammar;
-    private Map<String, Set<String>> firstSet = new HashMap<String, Set<String>>();
+    private Map<String, Set<String>> firstSet; // = new LinkedHashMap<String, Set<String>>();
     private Map<String, Set<String>> followSet = new HashMap<String, Set<String>>();
 
     public ParserGenerator(Grammar grammar) {
         this.grammar = grammar;
-        buildFirsts(grammar);
+        this.firstSet = buildFirsts(grammar);
     }
 
     public Grammar getGrammar() {
@@ -31,8 +33,10 @@ public class ParserGenerator {
     }
 
 
-    // TODO: FIX!!! (I need method to get i-th elem. of map or dictionary...)
-    private void buildFirsts(Grammar grammar) {
+    private Map<String, Set<String>> buildFirsts(Grammar grammar) {
+
+        Map<String, Set<String>> firstSet = new LinkedHashMap<String, Set<String>>();
+
         for (String terminal : grammar.getTerminals()) {
             Set<String> first = new HashSet<String>();
             firstSet.put(terminal, first);
@@ -58,17 +62,17 @@ public class ParserGenerator {
         }
 
         // If there is a Production X → Y1Y2..Yk then add first(Y1Y2..Yk) to first(X)
-        boolean symbolAdded;
+        boolean symbolAdded = false;
         do {
             symbolAdded = false;
             for (String nonterminal : grammar.getNonterminals()) {
                 for (Production production : grammar.getProds()) {
 
-                    if (production.getLeftSide() != nonterminal) {
+                    if (!production.getLeftSide().equals(nonterminal)) {
                         continue;
                     }
                     for (String item : firstSet.get(production.getRightSide().get(0))) {
-                        if (item != Grammar.EPSILON && !firstSet.get(nonterminal).contains(item)) {
+                        if (!item.equals(Grammar.EPSILON) && !firstSet.get(nonterminal).contains(item)) {
                             firstSet.get(nonterminal).add(item);
                             symbolAdded = true;
                         }
@@ -86,19 +90,19 @@ public class ParserGenerator {
 
                         if (epsilons) {
                             for (String item : firstSet.get(production.getRightSide().get(i))) {
-                                if (item != Grammar.EPSILON && !firstSet.get(nonterminal).contains(item)) {
+                                if (!item.equals(Grammar.EPSILON) && !firstSet.get(nonterminal).contains(item)) {
                                     firstSet.get(nonterminal).add(item);
                                     symbolAdded = true;
                                 }
                             }
-
-                            if (i == (production.getRightSide().size() - 1) && firstSet.get(production.getRightSide().get(production.getRightSide().size() - 1)).contains(Grammar.EPSILON)) {
+                            // ostatni elem i jego first zawiera epsilon - dodajemy do zbioru
+                            if ((i == (production.getRightSide().size() - 1)) && firstSet.get(production.getRightSide().get(production.getRightSide().size() - 1)).contains(Grammar.EPSILON)) {
                                 firstSet.get(nonterminal).add(Grammar.EPSILON);
                             }
                         }
                     }
 
-                    if (production.getRightSide().size() == 1 && firstSet.get(production.getRightSide().get(0)).contains(Grammar.EPSILON)) {
+                    if ((production.getRightSide().size() == 1) && firstSet.get(production.getRightSide().get(0)).contains(Grammar.EPSILON)) {
                         firstSet.get(nonterminal).add(Grammar.EPSILON);
                     }
                 }
@@ -107,6 +111,8 @@ public class ParserGenerator {
         } while (symbolAdded);
 
         firstSet.remove(Grammar.EPSILON);
+
+        return firstSet;
 
     }
 

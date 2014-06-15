@@ -7,6 +7,9 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Map;
+import java.util.Set;
+
 /**
  * @author Mateusz Drożdż
  */
@@ -15,18 +18,19 @@ public class ParserGeneratorTest {
     private GrammarParser grammarParser;
     private Grammar grammar;
     private String input;
+    private String input2;
 
     @Before
     public void setUp() throws Exception {
         // given
         grammarParser = new GrammarParser();
+        // from: http://hackingoff.com/compilers/predict-first-follow-set
         input = "Goal -> A\n" +
                 "A -> ( A ) | Two\n" +
                 "Two -> a\n" +
                 "Two -> b";
+
         grammar = grammarParser.parse(input);
-
-
 
     }
 
@@ -38,6 +42,15 @@ public class ParserGeneratorTest {
         // then
         Assert.assertTrue(generator.getFirstSet().size() > 0);
         System.out.println(generator.getFirstSet());
+        for (Map.Entry<String, Set<String>> entry : generator.getFirstSet().entrySet()) {
+            System.out.println(entry.getKey());
+            for (String val : entry.getValue()) {
+                System.out.print("   " + val);
+                System.out.println();
+            }
+        }
+
+        System.out.println(grammar.getProds());
 
     }
 }
