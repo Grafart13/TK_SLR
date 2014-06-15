@@ -109,7 +109,7 @@ public class GrammarParser {
     }
 
     private void addTerminal(String symbol) {
-        if (!nonterminals.contains(symbol)) {
+        if (!nonterminals.contains(symbol) && !symbol.equals(Grammar.EPSILON)) {
             terminals.add(symbol);
         }
     }
