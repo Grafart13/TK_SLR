@@ -48,7 +48,7 @@ public class GrammarParserTest {
                        "B -> B a | eps";
 
         List<String> nonterminals = Arrays.asList("S", "A", "B");
-        List<String> terminals = Arrays.asList("a", "b", "eps");
+        List<String> terminals = Arrays.asList("a", "b");
 
         // when
         Grammar grammar = grammarParser.parse(input);
@@ -57,6 +57,28 @@ public class GrammarParserTest {
         Assert.assertEquals(nonterminals, grammar.getNonterminals());
         Assert.assertEquals(terminals, grammar.getTerminals());
         Assert.assertEquals(8, grammar.getProds().size());
+
+        System.out.println(grammar.getProds());
+    }
+
+    @Test
+    public void testParseNo3() throws Exception {
+        // given
+        String input = "Goal -> A\n" +
+                "A -> ( A ) | Two\n" +
+                "Two -> a\n" +
+                "Two -> b";
+
+        List<String> nonterminals = Arrays.asList("Goal", "A", "Two");
+        List<String> terminals = Arrays.asList("(", ")", "a", "b");
+
+        // when
+        Grammar grammar = grammarParser.parse(input);
+
+        // then
+        Assert.assertEquals(nonterminals, grammar.getNonterminals());
+        Assert.assertEquals(terminals, grammar.getTerminals());
+        Assert.assertEquals(6, grammar.getProds().size());
 
         System.out.println(grammar.getProds());
     }
