@@ -41,6 +41,7 @@ public class ParserGeneratorTest {
 
         // then
         Assert.assertTrue(generator.getFirstSet().size() > 0);
+        System.out.println("First");
         System.out.println(generator.getFirstSet());
         for (Map.Entry<String, Set<String>> entry : generator.getFirstSet().entrySet()) {
             System.out.println(entry.getKey());
@@ -50,7 +51,19 @@ public class ParserGeneratorTest {
             }
         }
 
-        System.out.println(grammar.getProds());
+//        System.out.println(grammar.getProds());
+    }
+
+    @Test
+    public void testGetFollowSet() throws Exception {
+        // when
+        generator = new ParserGenerator(grammar);
+
+        // then
+        Assert.assertTrue(generator.getFollowSet().size() > 0);
+        System.out.println("Follow:");
+        System.out.println(generator.getFollowSet());
+        System.out.println();
 
     }
 }

@@ -78,6 +78,8 @@ public class GrammarParser {
 
         removeDuplicatedSymbols();
 
+        nonterminals.add(startSymbol);
+
         return new Grammar(productions, terminals, nonterminals);
     }
 

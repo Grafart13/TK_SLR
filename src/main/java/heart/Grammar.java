@@ -22,6 +22,9 @@ public class Grammar {
     private final List<String> terminals;// = new ArrayList<String>();
     private final List<String> nonterminals;// = new ArrayList<String>();
 
+    // First non terminal symbol in grammar.
+    private String startSymbol;
+
 
 
     Map<Integer, Production> productions;
@@ -33,6 +36,7 @@ public class Grammar {
         this.prods = prods;
         this.terminals = terminals;
         this.nonterminals = nonterminals;
+        this.startSymbol = prods.get(0).getLeftSide();
     }
 
     public List<Production> getProds() {
@@ -45,6 +49,10 @@ public class Grammar {
 
     public List<String> getNonterminals() {
         return nonterminals;
+    }
+
+    public String getStartSymbol() {
+        return startSymbol;
     }
 
     //    public Grammar() {
