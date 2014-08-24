@@ -1,8 +1,7 @@
 package heart;
 
-import com.sun.xml.internal.org.jvnet.fastinfoset.stax.LowLevelFastInfosetStreamWriter;
-
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by dpjar_000 on 2014-06-14.
@@ -13,6 +12,9 @@ public class Production {
     private final List<String> rightSide;
 
     public Production(String leftSide, List<String> rightSide) {
+        if (rightSide == null) {
+            throw new NullPointerException("Right side must be not null!");
+        }
         this.leftSide = leftSide;
         this.rightSide = rightSide;
     }
@@ -42,7 +44,6 @@ public class Production {
 
         if (!leftSide.equals(that.leftSide)) return false;
         if (rightSide.size() != that.rightSide.size()) return false;
-        boolean equals = true;
         for (int i=0; i<rightSide.size(); i++) {
             if (!rightSide.get(i).equals(that.rightSide.get(i))) return false;
         }

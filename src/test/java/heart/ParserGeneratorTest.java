@@ -1,9 +1,6 @@
-package test;
+package heart;
 
-import heart.Grammar;
-import heart.GrammarParser;
-import heart.ParserGenerator;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +15,6 @@ public class ParserGeneratorTest {
     private GrammarParser grammarParser;
     private Grammar grammar;
     private String input;
-    private String input2;
 
     @Before
     public void setUp() throws Exception {
