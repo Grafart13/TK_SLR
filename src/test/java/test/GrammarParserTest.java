@@ -26,7 +26,9 @@ public class GrammarParserTest {
         // given
         String input = "S -> S + A\n" +
                         "A -> *";
-        List<String> nonterminals = Arrays.asList("S", "A");
+        //todo: change results type to set
+//        List<String> nonterminals = Arrays.asList("S", "A");
+        List<String> nonterminals = Arrays.asList("S", "A", "S'");
         List<String> terminals = Arrays.asList("+", "*");
 
         // when
@@ -47,7 +49,8 @@ public class GrammarParserTest {
                        "A -> A b | eps\n" +
                        "B -> B a | eps";
 
-        List<String> nonterminals = Arrays.asList("S", "A", "B");
+//        List<String> nonterminals = Arrays.asList("S", "A", "B");
+        List<String> nonterminals = Arrays.asList("S", "A", "B", "S'");
         List<String> terminals = Arrays.asList("a", "b");
 
         // when
@@ -69,7 +72,8 @@ public class GrammarParserTest {
                 "Two -> a\n" +
                 "Two -> b";
 
-        List<String> nonterminals = Arrays.asList("Goal", "A", "Two");
+//        List<String> nonterminals = Arrays.asList("Goal", "A", "Two");
+        List<String> nonterminals = Arrays.asList("Goal", "A", "Two", "Goal'");
         List<String> terminals = Arrays.asList("(", ")", "a", "b");
 
         // when
