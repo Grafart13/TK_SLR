@@ -9,6 +9,8 @@ package heart;
  */
 
 public class StateItem {
+    public static final String END = "<end>";
+    public static final String DOT = "<*>";
     private Production production;
     /**
      * dotPosition = i means ( . ) is before prodRightSide[i] elem. (0 <==> E -> . E + T; 1 <==> E -> E . + T etc.)
@@ -37,7 +39,14 @@ public class StateItem {
     }
 
     public String getSymbolAfterDot(){
-        return production.getRightSide().get(dotPosition);
+        if (dotPosition < production.getRightSide().size()) return production.getRightSide().get(dotPosition);
+        else return END;
+    }
+
+    public void incrementDot() {
+        if (dotPosition < production.getLeftSide().length() ) {
+            dotPosition++;
+        }
     }
 
     @Override
@@ -45,16 +54,20 @@ public class StateItem {
         String ret = production.getLeftSide();
         ret += " ->";
         if (production.getRightSide().size() == 1 && production.getRightSide().contains(Grammar.EPSILON)) {
-            ret += " <*>";
+            ret += " " + DOT;
             return ret;
         }
         int counter = 0;
         for (String symbol : production.getRightSide()) {
             if (counter == dotPosition) {
-                ret += " <*>";
+                ret += " " + DOT;
             }
             ret += " " + symbol;
             counter++;
+        }
+        // dot at the end of prod.
+        if (counter == dotPosition) {
+            ret += " " + DOT;
         }
         return ret;
     }
