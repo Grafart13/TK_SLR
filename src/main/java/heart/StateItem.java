@@ -43,10 +43,8 @@ public class StateItem {
         else return END;
     }
 
-    public void incrementDot() {
-        if (dotPosition < production.getLeftSide().length() ) {
-            dotPosition++;
-        }
+    public StateItem moveDotOver() {
+        return new StateItem(production, dotPosition + 1);
     }
 
     @Override

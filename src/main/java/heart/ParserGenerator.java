@@ -210,5 +210,71 @@ public class ParserGenerator {
         return result;
     }
 
+    /**
+     * Defn: Goto(I,X), where I is a set of items, X is a terminal or non-terminal, is the
+     closure(A -> a X . b) where A -> a . X b is in I.
+     */
+
+    // TODO: maybe move to other (new?) class;
+    // TODO: TEST!!!
+    public Set<StateItem> computeGoto(Set<StateItem> items, String symbol) {
+        Closure closure = new Closure(grammar);
+        Set<StateItem> result = new HashSet<StateItem>();
+
+        for (StateItem item : items) {
+            if (symbol.equals(item.getSymbolAfterDot())) {
+                result.addAll(closure.produce(new HashSet<StateItem>(Arrays.asList(item.moveDotOver()))));
+            }
+        }
+        return result;
+    }
+    // TODO: maybe move to other (new?) class;
+    // TODO: TEST!!!
+    public Set<Set<StateItem>> computeDFAStates(Grammar grammar) {
+        Closure closure = new Closure(grammar);
+        // LinkedHashSet because of insertion-order
+        Set<Set<StateItem>> dfaStates = new LinkedHashSet<Set<StateItem>>();
+
+        // TODO: maybe extract method to Grammar?
+        Production zeroProd = grammar.getProds().get(0);
+
+        StateItem zeroItem = new StateItem(zeroProd);
+        Set<StateItem> state_0 = new HashSet<StateItem>(closure.produce(new HashSet<StateItem>(Arrays.asList(zeroItem))));
+        dfaStates.add(state_0);
+
+        Set<String> grammarSymbols = new HashSet<String>();
+        grammarSymbols.addAll(grammar.getTerminals());
+        grammarSymbols.addAll(grammar.getNonterminals());
+
+        Set<Set<StateItem>> prevNewStates = new LinkedHashSet<Set<StateItem>>();
+        Set<Set<StateItem>> currNewStates;
+
+        prevNewStates.add(state_0);
+
+        // iterate over dfaStates until no new sitiations(dfaStates) are generated
+        do {
+            // start with empty set
+            currNewStates = new LinkedHashSet<Set<StateItem>>();
+            // for every distinct previous action-set ...
+            for (Set<StateItem> newState : prevNewStates) {
+                // ... iterate over all symbols for particular state ...
+                for (String symbol : grammarSymbols) {
+                    // ... and generate GOTO transition
+                    Set<StateItem> gotoSet = computeGoto(newState, symbol);
+
+                    // collect distinct sets of states
+                    if (dfaStates.add(gotoSet)) {
+                        currNewStates.add(gotoSet);
+                    }
+                }
+            }
+
+            // currNewStates (if not empty) is a set of action for next loop;
+            prevNewStates = currNewStates;
+
+        } while (!currNewStates.isEmpty());
+
+        return dfaStates;
+    }
 
 }
