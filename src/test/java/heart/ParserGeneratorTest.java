@@ -4,8 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Mateusz Drożdż
@@ -25,6 +24,10 @@ public class ParserGeneratorTest {
                 "A -> ( A ) | Two\n" +
                 "Two -> a\n" +
                 "Two -> b";
+
+        String input2 = "S -> S*\n" +
+                        "S -> a(S)\n" +
+                        "S -> a";
 
         grammar = grammarParser.parse(input);
 
@@ -60,6 +63,91 @@ public class ParserGeneratorTest {
         System.out.println("Follow:");
         System.out.println(generator.getFollowSet());
         System.out.println();
+    }
 
+    @Test
+    public void testComputeGoto() throws Exception {
+        // given
+        String inputG = "E -> E + T | T\n" +
+                "T -> T * F | F\n" +
+                "F -> ( E ) | id";
+        grammarParser = new GrammarParser();
+        Grammar grammarG = grammarParser.parse(inputG);
+        ParserGenerator generatorG = new ParserGenerator(grammarG);
+
+        StateItem item1 = new StateItem(new Production("E'", Arrays.asList("E")), 1);
+        StateItem item2 = new StateItem(new Production("E", Arrays.asList("E", "+", "T")), 1);
+        String symbol = "+";
+        Set<StateItem> items = new LinkedHashSet<StateItem>();
+        items.add(item1);
+        items.add(item2);
+        // Goto({E’ÆE ., E Æ E . + T},+) = closure({E Æ E + . T}) =
+        // {E Æ E + . T, T Æ . T * F, T Æ . F, F Æ . id, F Æ . ( E )}
+
+        // when
+        Set<StateItem> gotos = generatorG.computeGoto(items, symbol);
+
+        // then
+        System.out.println("--GOTOS---");
+        System.out.println(gotos);
+        System.out.println("--/GOTOS---");
+        Assert.assertTrue(true);
+    }
+
+    @Test
+    public void testComputeGoto_2() throws Exception {
+        // given
+        String inputG = "E -> E + T | T\n" +
+                "T -> T * F | F\n" +
+                "F -> ( E ) | id";
+        grammarParser = new GrammarParser();
+        Grammar grammarG = grammarParser.parse(inputG);
+        ParserGenerator generatorG = new ParserGenerator(grammarG);
+
+        StateItem item1 = new StateItem(new Production("T", Arrays.asList("T", "*", "F")), 2);
+        StateItem item2 = new StateItem(new Production("T", Arrays.asList("F")), 0);
+        String symbol = "F";
+        Set<StateItem> items = new LinkedHashSet<StateItem>();
+        items.add(item1);
+        items.add(item2);
+        // Goto({T Æ T * . F, T Æ . F},F) = closure({T Æ T * F ., T Æ F .}) =
+        // {T Æ T * F ., T Æ F .}
+
+        // when
+        Set<StateItem> gotos = generatorG.computeGoto(items, symbol);
+
+        // then
+        System.out.println("--GOTOS_2---");
+        System.out.println(gotos);
+        System.out.println("--/GOTOS_2---");
+        Assert.assertTrue(true);
+    }
+
+    @Test
+    public void testComputeGoto_3() throws Exception {
+        // given
+        String inputG = "E -> E + T | T\n" +
+                "T -> T * F | F\n" +
+                "F -> ( E ) | id";
+        grammarParser = new GrammarParser();
+        Grammar grammarG = grammarParser.parse(inputG);
+        ParserGenerator generatorG = new ParserGenerator(grammarG);
+
+        StateItem item1 = new StateItem(new Production("E'", Arrays.asList("E")), 1);
+        StateItem item2 = new StateItem(new Production("E", Arrays.asList("E", "+", "T")), 2);
+        String symbol = "+";
+        Set<StateItem> items = new LinkedHashSet<StateItem>();
+        items.add(item1);
+        items.add(item2);
+        // Goto({E’ÆE ., E Æ E + . T},+) = closure({ }) = { }
+
+        // when
+        Set<StateItem> gotos = generatorG.computeGoto(items, symbol);
+
+        // then
+        System.out.println("--GOTOS_3---");
+        System.out.println(gotos);
+        System.out.println("--/GOTOS_3---");
+        Assert.assertTrue(true);
     }
 }

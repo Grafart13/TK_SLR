@@ -13,6 +13,10 @@ Others:
 http://courses.washington.edu/css448/zander/Notes/SLRtable.pdf
 http://arantxa.ii.uam.es/~modonnel/Compilers/SLR1Summary.pdf
 http://web.stanford.edu/class/archive/cs/cs143/cs143.1128/handouts/110%20LR%20and%20SLR%20Parsing.pdf
+http://pl.scribd.com/doc/17338168/Parsers-LR-LALRL-SLR
+
+Parser Generator (jar):
+http://www.jflap.org/jflaptmp/
 
 The SLR parsing algorithm:
 https://www.princeton.edu/~achaney/tmve/wiki100k/docs/Simple_LR_parser.html

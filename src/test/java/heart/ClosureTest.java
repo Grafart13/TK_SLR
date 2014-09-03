@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -38,6 +39,7 @@ public class ClosureTest {
         Set<StateItem> items = new HashSet<StateItem>();
         production = new Production("T", Arrays.asList("T", "*", "F"));
         stateItem = new StateItem(production, 1);
+        //Closure ({T Æ T . * F}) = {T Æ T . * F}
 
         // when
         items.add(stateItem);
@@ -53,6 +55,7 @@ public class ClosureTest {
         Set<StateItem> items = new HashSet<StateItem>();
         production = new Production("F", Arrays.asList("(", "E", ")"));
         stateItem = new StateItem(production, 1);
+        // Closure ({F Æ ( . E ) } ) = {F Æ ( . E ), E Æ . E + T, E Æ . T, T Æ . T * F, T Æ . F, F Æ . ( E ), F Æ . id }
 
         // when
         items.add(stateItem);
@@ -63,4 +66,24 @@ public class ClosureTest {
         Assert.assertTrue(true);
     }
 
+    @Test
+    public void testProduce_3() throws Exception {
+        // given
+        Set<StateItem> items = new LinkedHashSet<StateItem>();
+        production = new Production("T", Arrays.asList("T", "*", "F"));
+        stateItem = new StateItem(production, 1);
+        // Closure ({T Æ T . * F, T Æ T * . F}) = {T Æ T .* F, T Æ T * . F, F Æ . (E ), F Æ . id}
+
+        // when
+        items.add(new StateItem(new Production("T", Arrays.asList("T", "*", "F")), 1));
+        items.add(new StateItem(new Production("T", Arrays.asList("T", "*", "F")), 2));
+
+        // then
+        System.out.println("Produce_3");
+        System.out.println(closure.produce(items));
+        System.out.println("/Produce_3");
+
+        Assert.assertTrue(true);
+
+    }
 }

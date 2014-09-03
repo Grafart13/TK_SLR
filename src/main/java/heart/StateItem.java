@@ -31,7 +31,7 @@ public class StateItem {
         if (production == null) {
             throw new NullPointerException("Production must be not null!");
         }
-        if (dotPosition < 0 || dotPosition >= production.getRightSide().size()) {
+        if (dotPosition < 0 || dotPosition > production.getRightSide().size()) {
             throw new IllegalArgumentException("dotPosition must be in range <0, prod.legth)");
         }
         this.production = production;
