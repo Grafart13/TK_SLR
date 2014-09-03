@@ -1,0 +1,34 @@
+SLR online:
+http://hackingoff.com/compilers/slr-1-parser-generator
+
+Good tutorial:
+http://cs.gmu.edu/~white/CS540/slr.pdf
+
+http://home.agh.edu.pl/~mkuta/Sciaga.pdf
+
+First/follow:
+http://www.jambe.co.nz/UNI/FirstAndFollowSets.html
+
+Others:
+http://courses.washington.edu/css448/zander/Notes/SLRtable.pdf
+http://arantxa.ii.uam.es/~modonnel/Compilers/SLR1Summary.pdf
+http://web.stanford.edu/class/archive/cs/cs143/cs143.1128/handouts/110%20LR%20and%20SLR%20Parsing.pdf
+
+The SLR parsing algorithm:
+https://www.princeton.edu/~achaney/tmve/wiki100k/docs/Simple_LR_parser.html
+    Initialize the stack with S
+    Read input symbol
+    while (true)
+        if Action(top(stack), input) = S
+             NS <- Goto(top(stack),input)
+             push NS
+             Read next symbol
+        else if Action(top(stack), input) = Rk
+             output k
+             pop |RHS| of production k from stack
+             NS <- Goto(top(stack), LHS_k)
+             push NS
+        else if Action(top(stack),input) = A
+             output valid, return
+        else
+             output invalid, return
