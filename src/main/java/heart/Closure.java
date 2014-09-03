@@ -1,6 +1,6 @@
 package heart;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -19,7 +19,7 @@ public class Closure {
     }
 
     public Set<StateItem> produce(Set<StateItem> itemsSet) {
-        Set<StateItem> result = new HashSet<StateItem>(itemsSet);
+        Set<StateItem> result = new LinkedHashSet<StateItem>(itemsSet);
 
         for (StateItem item : itemsSet) {
             result.addAll(produceTmp(item));
@@ -36,7 +36,7 @@ public class Closure {
     }
 
     private Set<StateItem> produceTmp(StateItem stateItem) {
-        Set<StateItem> result = new HashSet<StateItem>();
+        Set<StateItem> result = new LinkedHashSet<StateItem>();
         result.add(stateItem);
         String symbolAfterDot = stateItem.getSymbolAfterDot();
         if (grammar.getTerminals().contains(symbolAfterDot)) {

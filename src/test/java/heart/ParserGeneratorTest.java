@@ -126,12 +126,12 @@ public class ParserGeneratorTest {
     @Test
     public void testComputeGoto_3() throws Exception {
         // given
-        String inputG = "E -> E + T | T\n" +
+        String input = "E -> E + T | T\n" +
                 "T -> T * F | F\n" +
                 "F -> ( E ) | id";
         grammarParser = new GrammarParser();
-        Grammar grammarG = grammarParser.parse(inputG);
-        ParserGenerator generatorG = new ParserGenerator(grammarG);
+        Grammar grammar = grammarParser.parse(input);
+        ParserGenerator generator = new ParserGenerator(grammar);
 
         StateItem item1 = new StateItem(new Production("E'", Arrays.asList("E")), 1);
         StateItem item2 = new StateItem(new Production("E", Arrays.asList("E", "+", "T")), 2);
@@ -142,12 +142,37 @@ public class ParserGeneratorTest {
         // Goto({E’ÆE ., E Æ E + . T},+) = closure({ }) = { }
 
         // when
-        Set<StateItem> gotos = generatorG.computeGoto(items, symbol);
+        Set<StateItem> gotos = generator.computeGoto(items, symbol);
 
         // then
         System.out.println("--GOTOS_3---");
         System.out.println(gotos);
         System.out.println("--/GOTOS_3---");
         Assert.assertTrue(true);
+    }
+
+    @Test
+    public void testComputeDFAStates() throws Exception {
+        // given
+        String input = "E -> E + T | T\n" +
+                "T -> T * F | F\n" +
+                "F -> ( E ) | id";
+        grammarParser = new GrammarParser();
+        Grammar grammar = grammarParser.parse(input);
+        ParserGenerator generator = new ParserGenerator(grammar);
+        Set<Set<StateItem>> states;
+
+        // when
+        states = generator.computeDFAStates(grammar);
+
+        // then
+        System.out.println("--- DFA ---");
+        for (Set<StateItem> state : states) {
+            System.out.println("  " + state);
+        }
+        System.out.println("--- /DFA ---");
+
+
+
     }
 }

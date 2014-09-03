@@ -216,7 +216,6 @@ public class ParserGenerator {
      */
 
     // TODO: maybe move to other (new?) class;
-    // TODO: TEST!!!
     public Set<StateItem> computeGoto(Set<StateItem> items, String symbol) {
         Closure closure = new Closure(grammar);
         Set<StateItem> result = new HashSet<StateItem>();
@@ -240,6 +239,9 @@ public class ParserGenerator {
 
         StateItem zeroItem = new StateItem(zeroProd);
         Set<StateItem> state_0 = new HashSet<StateItem>(closure.produce(new HashSet<StateItem>(Arrays.asList(zeroItem))));
+        // debug
+        System.out.println("T(0): " + state_0);
+
         dfaStates.add(state_0);
 
         Set<String> grammarSymbols = new HashSet<String>();
@@ -263,7 +265,10 @@ public class ParserGenerator {
                     Set<StateItem> gotoSet = computeGoto(newState, symbol);
 
                     // collect distinct sets of states
-                    if (dfaStates.add(gotoSet)) {
+                    if (!gotoSet.isEmpty() && dfaStates.add(gotoSet)) {
+                        // debug
+                        System.out.println("  add: GOTO(" + newState + ", " + symbol + ") = " + gotoSet);
+
                         currNewStates.add(gotoSet);
                     }
                 }

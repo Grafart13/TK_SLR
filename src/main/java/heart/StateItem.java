@@ -10,7 +10,7 @@ package heart;
 
 public class StateItem {
     public static final String END = "<end>";
-    public static final String DOT = "<*>";
+    public static final String DOT = ".";
     private Production production;
     /**
      * dotPosition = i means ( . ) is before prodRightSide[i] elem. (0 <==> E -> . E + T; 1 <==> E -> E . + T etc.)
