@@ -27,7 +27,7 @@ public class StateItemTest {
         // when
         StateItem item = new StateItem(production, dotPosition);
         // then
-        Assert.assertEquals("E -> E <*> + T", item.toString());
+        Assert.assertEquals("E -> E " + StateItem.DOT + " + T", item.toString());
 
     }
 
@@ -38,7 +38,7 @@ public class StateItemTest {
         // when
         StateItem item = new StateItem(epsProduction, dotPosition);
         // then
-        Assert.assertEquals("S -> <*>", item.toString());
+        Assert.assertEquals("S -> " + StateItem.DOT, item.toString());
 
     }
 
