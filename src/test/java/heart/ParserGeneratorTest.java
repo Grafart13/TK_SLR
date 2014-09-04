@@ -173,25 +173,4 @@ public class ParserGeneratorTest {
         System.out.println("--- /DFA ---");
     }
 
-//    @Test
-//    public void testComputeDFAStates() throws Exception {
-//        // given
-//        String input = "E -> E + T | T\n" +
-//                "T -> T * F | F\n" +
-//                "F -> ( E ) | id";
-//        grammarParser = new GrammarParser();
-//        Grammar grammar = grammarParser.parse(input);
-//        ParserGenerator generator = new ParserGenerator(grammar);
-//        Set<Set<StateItem>> states;
-//
-//        // when
-//        states = generator.computeDFAStates(grammar);
-//
-//        // then
-//        System.out.println("--- DFA ---");
-//        for (Set<StateItem> state : states) {
-//            System.out.println("  " + state);
-//        }
-//        System.out.println("--- /DFA ---");
-//    }
 }

@@ -231,13 +231,11 @@ public class ParserGenerator {
     }
     // TODO: maybe move to other (new?) class;
     // TODO: TEST!!!
-//    public Set<Set<StateItem>> computeDFAStates(Grammar grammar) {
     public Set<DFAState> computeDFAStates(Grammar grammar) {
         statesMap = new HashMap<Integer, DFAState>();
 
         Closure closure = new Closure(grammar);
         // LinkedHashSet because of insertion-order
-//        Set<Set<StateItem>> dfaStates = new LinkedHashSet<Set<StateItem>>();
         Set<DFAState> dfaStates = new LinkedHashSet<DFAState>();
 
         // TODO: maybe extract method to Grammar?
@@ -245,10 +243,6 @@ public class ParserGenerator {
 
         StateItem zeroItem = new StateItem(zeroProd);
         Set<StateItem> state_0 = new HashSet<StateItem>(closure.produce(new HashSet<StateItem>(Arrays.asList(zeroItem))));
-        // debug
-//        System.out.println("T(0): " + state_0);
-
-//        dfaStates.add(state_0);
 
         int counter = 0;
         DFAState dfaState_0 = new DFAState(counter, new Goto(state_0, null, null));
@@ -260,12 +254,9 @@ public class ParserGenerator {
         grammarSymbols.addAll(grammar.getTerminals());
         grammarSymbols.addAll(grammar.getNonterminals());
 
-//        Set<Set<StateItem>> prevNewStates = new LinkedHashSet<Set<StateItem>>();
-//        Set<Set<StateItem>> currNewStates;
         Set<DFAState> prevStates = new LinkedHashSet<DFAState>();
         Set<DFAState> currStates;
 
-//        prevNewStates.add(state_0);
         prevStates.add(dfaState_0);
 
         GotoBuilder gotoBuilder = new GotoBuilder(grammar);
@@ -273,38 +264,29 @@ public class ParserGenerator {
         // iterate over dfaStates until no new sitiations(dfaStates) are generated
         do {
             // start with empty set
-//            currNewStates = new LinkedHashSet<Set<StateItem>>();
             currStates = new LinkedHashSet<DFAState>();
             // for every distinct previous action-set ...
 
-//            for (Set<StateItem> newState : prevNewStates) {
             for (DFAState newState : prevStates) {
                 // ... iterate over all symbols for particular state ...
                 for (String symbol : grammarSymbols) {
                     // ... and generate GOTO transition
-//                    Set<StateItem> gotoSet = computeGoto(newState, symbol);
                     Goto gotoSet = gotoBuilder.compute(newState.getState(), symbol);
                     DFAState dfaState = new DFAState(counter, gotoSet);
 
 
                     // collect distinct sets of states
-//                    if (!gotoSet.isEmpty() && dfaStates.add(gotoSet)) {
                     if (!gotoSet.getState().isEmpty() && dfaStates.add(dfaState)) {
                         // debug
-//                        System.out.println("  add: GOTO(" + newState + ", " + symbol + ") = " + gotoSet);
-
                         System.out.println("  add: GOTO(" + newState.getState() + ", " + symbol + ") = " + gotoSet.getState());
-//                        currNewStates.add(gotoSet);
                         currStates.add(dfaState);
                     }
                 }
             }
 
             // currNewStates (if not empty) is a set of action for next loop;
-//            prevNewStates = currNewStates;
             prevStates = currStates;
 
-//        } while (!currNewStates.isEmpty());
         } while (!currStates.isEmpty());
 
         return dfaStates;
