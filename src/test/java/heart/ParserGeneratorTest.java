@@ -173,4 +173,31 @@ public class ParserGeneratorTest {
         System.out.println("--- /DFA ---");
     }
 
+    @Test
+    public void testParserArray() throws Exception {
+        // given
+        String input = "E -> E + T | T\n" +
+                "T -> T * F | F\n" +
+                "F -> ( E ) | id";
+        grammarParser = new GrammarParser();
+        Grammar grammar = grammarParser.parse(input);
+        ParserGenerator generator = new ParserGenerator(grammar);
+        Set<DFAState> states = generator.computeDFAStates(grammar);
+        List<String> symbols = new ArrayList<String>();
+        symbols.addAll(grammar.getTerminals());
+        symbols.add(Grammar.DOLLAR);
+        symbols.addAll(grammar.getNonterminals());
+        ParserArray parserArray;
+
+        // when
+        parserArray = generator.generateParserArray(new ArrayList<DFAState>(states), symbols);
+
+        // then
+        System.out.println("ARRAY");
+        System.out.println(parserArray);
+        System.out.println();
+        parserArray.print();
+        System.out.println();
+        System.out.println("ARRAY");
+    }
 }

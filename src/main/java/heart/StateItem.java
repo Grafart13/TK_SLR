@@ -47,6 +47,10 @@ public class StateItem {
         return new StateItem(production, dotPosition + 1);
     }
 
+    public Production getProduction() {
+        return production;
+    }
+
     @Override
     public String toString() {
         String ret = production.getLeftSide();
