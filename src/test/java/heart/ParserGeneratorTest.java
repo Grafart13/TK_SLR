@@ -81,7 +81,7 @@ public class ParserGeneratorTest {
         Set<StateItem> items = new LinkedHashSet<StateItem>();
         items.add(item1);
         items.add(item2);
-        // Goto({E’ÆE ., E Æ E . + T},+) = closure({E Æ E + . T}) =
+        // GotoOld({E’ÆE ., E Æ E . + T},+) = closure({E Æ E + . T}) =
         // {E Æ E + . T, T Æ . T * F, T Æ . F, F Æ . id, F Æ . ( E )}
 
         // when
@@ -110,7 +110,7 @@ public class ParserGeneratorTest {
         Set<StateItem> items = new LinkedHashSet<StateItem>();
         items.add(item1);
         items.add(item2);
-        // Goto({T Æ T * . F, T Æ . F},F) = closure({T Æ T * F ., T Æ F .}) =
+        // GotoOld({T Æ T * . F, T Æ . F},F) = closure({T Æ T * F ., T Æ F .}) =
         // {T Æ T * F ., T Æ F .}
 
         // when
@@ -139,7 +139,7 @@ public class ParserGeneratorTest {
         Set<StateItem> items = new LinkedHashSet<StateItem>();
         items.add(item1);
         items.add(item2);
-        // Goto({E’ÆE ., E Æ E + . T},+) = closure({ }) = { }
+        // GotoOld({E’ÆE ., E Æ E + . T},+) = closure({ }) = { }
 
         // when
         Set<StateItem> gotos = generator.computeGoto(items, symbol);
@@ -160,19 +160,38 @@ public class ParserGeneratorTest {
         grammarParser = new GrammarParser();
         Grammar grammar = grammarParser.parse(input);
         ParserGenerator generator = new ParserGenerator(grammar);
-        Set<Set<StateItem>> states;
+        Set<DFAState> states;
 
         // when
         states = generator.computeDFAStates(grammar);
 
         // then
         System.out.println("--- DFA ---");
-        for (Set<StateItem> state : states) {
-            System.out.println("  " + state);
+        for (DFAState state : states) {
+            System.out.println("  " + state.getState());
         }
         System.out.println("--- /DFA ---");
-
-
-
     }
+
+//    @Test
+//    public void testComputeDFAStates() throws Exception {
+//        // given
+//        String input = "E -> E + T | T\n" +
+//                "T -> T * F | F\n" +
+//                "F -> ( E ) | id";
+//        grammarParser = new GrammarParser();
+//        Grammar grammar = grammarParser.parse(input);
+//        ParserGenerator generator = new ParserGenerator(grammar);
+//        Set<Set<StateItem>> states;
+//
+//        // when
+//        states = generator.computeDFAStates(grammar);
+//
+//        // then
+//        System.out.println("--- DFA ---");
+//        for (Set<StateItem> state : states) {
+//            System.out.println("  " + state);
+//        }
+//        System.out.println("--- /DFA ---");
+//    }
 }

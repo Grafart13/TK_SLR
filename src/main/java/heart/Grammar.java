@@ -1,9 +1,5 @@
 package heart;
 
-import heart.Production;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 
@@ -29,7 +25,7 @@ public class Grammar {
 
     Map<Integer, Production> productions;
     Map<Symbol, List<Symbol>> follows;
-    List<Goto> gotos;
+    List<GotoOld> gotoOlds;
     int numberOfProduction;
 
     public Grammar(List<Production> prods, List<String> terminals, List<String> nonterminals) {
@@ -58,7 +54,7 @@ public class Grammar {
     //    public Grammar() {
 //        productions = new HashMap<Integer, Production>();
 //        numberOfProduction =0;
-//        gotos = new ArrayList<Goto>();
+//        gotoOlds = new ArrayList<GotoOld>();
 //        follows = new HashMap<Symbol, List<Symbol>>();
 //    }
 

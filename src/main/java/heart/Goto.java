@@ -1,49 +1,52 @@
 package heart;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 /**
- * Created by dpjar_000 on 2014-06-14.
+ * @author Mateusz Drożdż
  */
 public class Goto {
-    private int id;
-    private Goto from;
-    private Symbol przez; // change
-    private List<Production> productionList;
+    private Set<StateItem> state;
 
-    public Goto(int _id, Goto _from, Symbol _przez) {
-        productionList = new ArrayList<Production>();
-        this.id = _id;
-        this.from = _from;
-        this.przez = _przez;
+    private Set<StateItem> from;
+    private String symbol;
+
+    public Goto(Set<StateItem> state, Set<StateItem> from, String symbol) {
+        this.state = state;
+        this.from = from;
+        this.symbol = symbol;
     }
 
-    public boolean isEqual(Goto anotherGoto) {
-        // add new Goto only, when it is unrepeated
-        //
-        // How?
+    public void setState(Set<StateItem> state) {
+        this.state = state;
+    }
 
-        List<Production> anotherProductionList = anotherGoto.getProductionList();
-        int i=0;
-        if (anotherProductionList.size() != productionList.size()) {
-            System.out.println("Different set of goto");
-            return false;
-        }
-        int max = productionList.size();
-        while (i < max ) {
-            Production prod = productionList.get(i);
-            Production prod2 = anotherProductionList.get(i);
-            if (!prod2.isEqual(prod)) {
-                return false;
-            }
-            i++;
-        }
+    public Set<StateItem> getState() {
+        return state;
+    }
+
+    public Set<StateItem> getFrom() {
+        return from;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Goto aGoto = (Goto) o;
+
+        if (state != null ? !state.equals(aGoto.state) : aGoto.state != null) return false;
 
         return true;
     }
 
-    public List<Production> getProductionList() {
-        return productionList;
+    @Override
+    public int hashCode() {
+        return state != null ? state.hashCode() : 0;
     }
 }
