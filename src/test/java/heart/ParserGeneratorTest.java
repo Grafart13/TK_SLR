@@ -174,30 +174,77 @@ public class ParserGeneratorTest {
     }
 
     @Test
-    public void testParserArray() throws Exception {
+    public void testComputeDFAStatesEx2() throws Exception {
         // given
-        String input = "E -> E + T | T\n" +
-                "T -> T * F | F\n" +
-                "F -> ( E ) | id";
+        String input = "S -> S * | a ( S ) | a";
+        grammarParser = new GrammarParser();
+        Grammar grammar = grammarParser.parse(input);
+        ParserGenerator generator = new ParserGenerator(grammar);
+        Set<DFAState> states;
+
+        // when
+        states = generator.computeDFAStates(grammar);
+
+        // then
+        System.out.println("--- DFA EX2 ---");
+        for (DFAState state : states) {
+            System.out.println("  " + state.getId() + ": "  + state.getState());
+        }
+        System.out.println("--- /DFA EX2 ---");
+    }
+
+//    @Test
+//    public void testParserArray() throws Exception {
+//        // given
+//        String input = "E -> E + T | T\n" +
+//                "T -> T * F | F\n" +
+//                "F -> ( E ) | id";
+//        grammarParser = new GrammarParser();
+//        Grammar grammar = grammarParser.parse(input);
+//        ParserGenerator generator = new ParserGenerator(grammar);
+//        Set<DFAState> states = generator.computeDFAStates(grammar);
+//        List<String> symbols = new ArrayList<String>();
+//        symbols.addAll(grammar.getTerminals());
+//        symbols.add(Grammar.DOLLAR);
+//        symbols.addAll(grammar.getNonterminals());
+//        ParserArray parserArray;
+//
+//        // when
+//        parserArray = generator.generateParserArray(new ArrayList<DFAState>(states), symbols);
+//
+//        // then
+//        System.out.println("ARRAY");
+//        System.out.println(parserArray);
+//        System.out.println();
+//        parserArray.print();
+//        System.out.println();
+//        System.out.println("ARRAY");
+//    }
+
+    /**
+     * 1) Przejscia - OK
+     * 2) shift - brakuje (T4, a): sh2  i  (T5, *): sh3 ... // chyba nie wszystkie stany maja ustawiane 'from'...
+     */
+    @Test
+    public void testGenerateParserArrayAnother() throws Exception {
+        // given
+        String input = "S -> S * | a ( S ) | a";
         grammarParser = new GrammarParser();
         Grammar grammar = grammarParser.parse(input);
         ParserGenerator generator = new ParserGenerator(grammar);
         Set<DFAState> states = generator.computeDFAStates(grammar);
-        List<String> symbols = new ArrayList<String>();
-        symbols.addAll(grammar.getTerminals());
-        symbols.add(Grammar.DOLLAR);
-        symbols.addAll(grammar.getNonterminals());
-        ParserArray parserArray;
+        ParserArrayAnother array;
 
         // when
-        parserArray = generator.generateParserArray(new ArrayList<DFAState>(states), symbols);
+        array = generator.generateParserArrayAnother(new ArrayList<DFAState>(states));
 
         // then
-        System.out.println("ARRAY");
-        System.out.println(parserArray);
+        System.out.println("ARRAY 2");
+        System.out.println(array);
         System.out.println();
-        parserArray.print();
+        array.print();
         System.out.println();
-        System.out.println("ARRAY");
+        System.out.println("//ARRAY 2");
+
     }
 }

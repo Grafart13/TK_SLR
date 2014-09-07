@@ -281,9 +281,17 @@ public class ParserGenerator {
                     // collect distinct sets of states
                     if (!gotoSet.getState().isEmpty() && dfaStates.add(dfaState)) {
                         // debug
-                        System.out.println("  add: GOTO(" + newState.getState() + ", " + symbol + ") = " + gotoSet.getState());
+                        System.out.println("  add: " + counter  + ":  GOTO(" + newState.getState() + ", " + symbol + ") = " + gotoSet.getState());
                         currStates.add(dfaState);
                         counter++;
+                    } else {
+                        // TODO: make working
+                        // add additional 'from' state
+                        for (DFAState possiblyTheSameState : dfaStates) {
+                            if (possiblyTheSameState.equals(dfaState)) {
+                                possiblyTheSameState.addFrom(dfaState.getState(), symbol);
+                            }
+                        }
                     }
                 }
             }
@@ -363,6 +371,41 @@ public class ParserGenerator {
         }
 
 
+
+        return array;
+    }
+
+    public ParserArrayAnother generateParserArrayAnother(List<DFAState> states) {
+        ParserArrayAnother array = new ParserArrayAnother();
+
+        for (DFAState dfaState : states) {
+            // kropka przed nieterminalem – wtedy jest przejscie
+            for (StateItem stateItem : dfaState.getState()) {
+                String symbolAfterDot = stateItem.getSymbolAfterDot();
+                if (grammar.getNonterminals().contains(symbolAfterDot)) {
+                       // szukamy GOTO dla naszego stanu przez symbol po kropce
+                    for (DFAState stateTmp : states) {
+                        if (!stateTmp.getState().isEmpty() && symbolAfterDot.equals(stateTmp.symbol()) && dfaState.getState().equals(stateTmp.from())) {
+                            array.addAction(dfaState.getId(), symbolAfterDot, "T_" + stateTmp.getId());
+                        }
+                    }
+                }
+            }
+
+            // kropka przed terminalem - shift
+            for (StateItem stateItem : dfaState.getState()) {
+                String symbolAfterDot = stateItem.getSymbolAfterDot();
+                // jesli terminal...
+                if (grammar.getTerminals().contains(symbolAfterDot)) {
+                    // szukamy GOTO j.w.
+                    for (DFAState stateTmp : states) {
+                        if (!stateTmp.getState().isEmpty() && symbolAfterDot.equals(stateTmp.symbol()) && dfaState.getState().equals(stateTmp.from())) {
+                            array.addAction(dfaState.getId(), symbolAfterDot, "sh" + stateTmp.getId());
+                        }
+                    }
+                }
+            }
+        }
 
         return array;
     }

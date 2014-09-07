@@ -1,5 +1,7 @@
 package heart;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -9,12 +11,18 @@ public class Goto {
     private Set<StateItem> state;
 
     private Set<StateItem> from;
+    private Map<Set<StateItem>, String> fromMap = new LinkedHashMap<Set<StateItem>, String>();
     private String symbol;
 
     public Goto(Set<StateItem> state, Set<StateItem> from, String symbol) {
         this.state = state;
         this.from = from;
         this.symbol = symbol;
+        this.fromMap.put(from, symbol);
+    }
+
+    public void addFrom(Set<StateItem> from, String symbol) {
+        fromMap.put(from, symbol);
     }
 
     public void setState(Set<StateItem> state) {

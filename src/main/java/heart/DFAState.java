@@ -30,6 +30,10 @@ public class DFAState {
         return gotoState.getSymbol();
     }
 
+    public void addFrom(Set<StateItem> from, String symbol) {
+        gotoState.addFrom(from, symbol);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
