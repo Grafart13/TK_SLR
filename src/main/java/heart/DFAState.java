@@ -1,5 +1,7 @@
 package heart;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -8,6 +10,8 @@ import java.util.Set;
 public class DFAState {
     private final int id;
     private final Goto gotoState;
+
+    private Map<Integer, String> fromIdMap = new LinkedHashMap<Integer, String>();
 
     public DFAState(int id, Goto gotoState) {
         this.id = id;
@@ -28,6 +32,14 @@ public class DFAState {
 
     public String symbol() {
         return gotoState.getSymbol();
+    }
+
+    public boolean containsInFrom(int id, String symbol) {
+        return fromIdMap.containsKey(id) && symbol.equals(fromIdMap.get(id));
+    }
+
+    public void addFromId(Integer id, String symbol) {
+        fromIdMap.put(id, symbol);
     }
 
     public void addFrom(Set<StateItem> from, String symbol) {

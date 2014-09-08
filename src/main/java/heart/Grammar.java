@@ -1,6 +1,5 @@
 package heart;
 
-import java.util.Map;
 import java.util.List;
 
 /**
@@ -20,13 +19,6 @@ public class Grammar {
 
     // First non terminal symbol in grammar.
     private String startSymbol;
-
-
-
-    Map<Integer, Production> productions;
-    Map<Symbol, List<Symbol>> follows;
-    List<GotoOld> gotoOlds;
-    int numberOfProduction;
 
     public Grammar(List<Production> prods, List<String> terminals, List<String> nonterminals) {
         this.prods = prods;
@@ -51,54 +43,8 @@ public class Grammar {
         return startSymbol;
     }
 
-    //    public Grammar() {
-//        productions = new HashMap<Integer, Production>();
-//        numberOfProduction =0;
-//        gotoOlds = new ArrayList<GotoOld>();
-//        follows = new HashMap<Symbol, List<Symbol>>();
-//    }
-
-//    protected void addZeroProduction(Production prod) {
-//        String line = "S'->";
-//        line += prod.getLeft();
-//        Production zeroProduction = new Production(line);
-//        productions.put(numberOfProduction, zeroProduction);
-//        numberOfProduction++;
-//    }
-
-//    public void addProduction(Production prod) {
-//        if (numberOfProduction == 0) {
-//            // add zero production
-//            addZeroProduction(prod);
-//        }
-//        productions.put(numberOfProduction, prod);
-//        numberOfProduction++;
-//    }
-
-//    public Production parseLine(String line) {
-  //      Production production = new Production(line);
-  //      return null;
-   // }
-
-//    public void parseAll(String all) {
-//        String[] lines = all.split(" ");
-//        // or \n ->look
-//        //String[] lines = all.split("\n");
-//        for (String line : lines) {
-//            //Production production = new Production(line);
-//            addProduction(new Production(line));
-//        }
-//    }
-
-    public void generateFollows() {
-
+    public int getProdNumber(Production production) {
+        return prods.lastIndexOf(production);
     }
 
-    public void generateGoto() {
-
-    }
-
-    public void generateParseTable() {
-
-    }
 }

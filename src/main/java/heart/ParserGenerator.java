@@ -16,7 +16,6 @@ public class ParserGenerator {
     private Map<String, Set<String>> followSet = new HashMap<String, Set<String>>();
 
     private Map<Integer, DFAState> statesMap;
-    private ParserArray parserArray;
 
     public ParserGenerator(Grammar grammar) {
         this.grammar = grammar;
@@ -270,26 +269,30 @@ public class ParserGenerator {
             currStates = new LinkedHashSet<DFAState>();
             // for every distinct previous action-set ...
 
-            for (DFAState newState : prevStates) {
+            for (DFAState prevState : prevStates) {
                 // ... iterate over all symbols for particular state ...
                 for (String symbol : grammarSymbols) {
                     // ... and generate GOTO transition
-                    Goto gotoSet = gotoBuilder.compute(newState.getState(), symbol);
-                    DFAState dfaState = new DFAState(counter, gotoSet);
+                    Goto newGotoSet = gotoBuilder.compute(prevState.getState(), symbol);
+                    DFAState newDfaState = new DFAState(counter, newGotoSet);
 
 
-                    // collect distinct sets of states
-                    if (!gotoSet.getState().isEmpty() && dfaStates.add(dfaState)) {
+                    // collect distinct sets of states (if newState is different than prev)
+                    if (!newGotoSet.getState().isEmpty() && dfaStates.add(newDfaState)) {
                         // debug
-                        System.out.println("  add: " + counter  + ":  GOTO(" + newState.getState() + ", " + symbol + ") = " + gotoSet.getState());
-                        currStates.add(dfaState);
+                        System.out.println("  add: " + counter  + ":  GOTO(" + prevState.getState() + ", " + symbol + ") = " + newGotoSet.getState());
+                        //---
+                        newDfaState.addFromId(prevState.getId(), symbol);
+                        //---
+                        currStates.add(newDfaState);
                         counter++;
-                    } else {
-                        // TODO: make working
+                        // else we computed prev. existed state - add new fromId to computed prev state
+                    } else if (!newGotoSet.getState().isEmpty()) {
                         // add additional 'from' state
-                        for (DFAState possiblyTheSameState : dfaStates) {
-                            if (possiblyTheSameState.equals(dfaState)) {
-                                possiblyTheSameState.addFrom(dfaState.getState(), symbol);
+                        for (DFAState possiblyTheSamePrevState : dfaStates) {
+                            //  if corresponding state founded
+                            if (possiblyTheSamePrevState.getState().equals(newGotoSet.getState())) {
+                                possiblyTheSamePrevState.addFromId(prevState.getId(), symbol);
                             }
                         }
                     }
@@ -309,74 +312,8 @@ public class ParserGenerator {
         return dfaStates;
     }
 
-    public ParserArray generateParserArray(List<DFAState> states, List<String> symbols) {
-        ParserArray array = new ParserArray(states, symbols);
-        for (DFAState state : statesMap.values()) {
-            // kropka przed nieterminalem – wtedy jest przejscie
-            for (StateItem stateItem : state.getState()) {
-                String symbolAfterDot = stateItem.getSymbolAfterDot();
-                if (grammar.getNonterminals().contains(symbolAfterDot)) {
-                    // szukamy GOTO przez state przez dany symbol
-                    int id = -1;
-                    for (DFAState dfaState : states) {
-                        if (dfaState.from() != null && dfaState.from().equals(state.getState()) && dfaState.symbol().equals(symbolAfterDot)) {
-                            id = dfaState.getId();
-                        }
-                    }
-                    array.setAction(state.getId(), symbolAfterDot, "T_" + id );
-                }
-            }
-
-            // kropka przed terminalem – wtedy jest przesunięecie „sh”,
-            for (StateItem stateItem : state.getState()) {
-                String symbolAfterDot = stateItem.getSymbolAfterDot();
-                if (grammar.getTerminals().contains(symbolAfterDot)) {
-                    // szukamy GOTO przez state przez dany symbol
-                    int id = -1;
-                    for (DFAState dfaState : states) {
-                        if (dfaState.from() != null && dfaState.from().equals((state.getState())) && dfaState.symbol().equals(symbolAfterDot)) {
-                            id = dfaState.getId();
-                        }
-                    }
-                    array.setAction(state.getId(), symbolAfterDot, "sh" + id);
-                }
-            }
-
-            // kropka na koncu - red || lub acc dla prod. red0
-            for (StateItem stateItem : state.getState()) {
-                String symbolAfterDot = stateItem.getSymbolAfterDot();
-                if (symbolAfterDot.equals(StateItem.END)) {
-                    // szukamy numerku produkcji
-                    int id = 0;
-                    String nietPrzedStrzalka = null;
-                    for (Production production : grammar.getProds())  {
-                        if (!production.equals(stateItem.getProduction())) {
-                            id++;
-                        } else {
-                            nietPrzedStrzalka = production.getLeftSide();
-                        }
-
-                    }
-                    // akceptacja - acc
-                    if (id == 0) {
-                        for (String redSymbol : followSet.get(nietPrzedStrzalka))
-                            array.setAction(state.getId(), redSymbol, "acc");
-                    } else {
-                        for (String redSymbol : followSet.get(nietPrzedStrzalka))
-                            array.setAction(state.getId(), redSymbol, "red" + id);
-                    }
-                }
-            }
-
-        }
-
-
-
-        return array;
-    }
-
-    public ParserArrayAnother generateParserArrayAnother(List<DFAState> states) {
-        ParserArrayAnother array = new ParserArrayAnother();
+    public ParserArray generateParserArrayAnother(List<DFAState> states) {
+        ParserArray array = new ParserArray();
 
         for (DFAState dfaState : states) {
             // kropka przed nieterminalem – wtedy jest przejscie
@@ -385,7 +322,7 @@ public class ParserGenerator {
                 if (grammar.getNonterminals().contains(symbolAfterDot)) {
                        // szukamy GOTO dla naszego stanu przez symbol po kropce
                     for (DFAState stateTmp : states) {
-                        if (!stateTmp.getState().isEmpty() && symbolAfterDot.equals(stateTmp.symbol()) && dfaState.getState().equals(stateTmp.from())) {
+                        if (!stateTmp.getState().isEmpty() && symbolAfterDot.equals(stateTmp.symbol()) && stateTmp.containsInFrom(dfaState.getId(), symbolAfterDot)) {
                             array.addAction(dfaState.getId(), symbolAfterDot, "T_" + stateTmp.getId());
                         }
                     }
@@ -399,8 +336,26 @@ public class ParserGenerator {
                 if (grammar.getTerminals().contains(symbolAfterDot)) {
                     // szukamy GOTO j.w.
                     for (DFAState stateTmp : states) {
-                        if (!stateTmp.getState().isEmpty() && symbolAfterDot.equals(stateTmp.symbol()) && dfaState.getState().equals(stateTmp.from())) {
+                        if (!stateTmp.getState().isEmpty() && symbolAfterDot.equals(stateTmp.symbol()) && stateTmp.containsInFrom(dfaState.getId(), symbolAfterDot)) {
+                            // add shift
                             array.addAction(dfaState.getId(), symbolAfterDot, "sh" + stateTmp.getId());
+                        }
+                    }
+                }
+            }
+
+            // kropka na koncu - redukcja
+            for (StateItem stateItem : dfaState.getState()) {
+                String symbolAfterDot = stateItem.getSymbolAfterDot();
+                // jesli koniec...
+                if (StateItem.END.equals(symbolAfterDot)) {
+                    // jesli red do 0 == acc
+                    if (grammar.getProdNumber(stateItem.getProduction()) == 0) {
+                        array.addAction(dfaState.getId(), Grammar.DOLLAR, "acc");
+                    } else {
+                        // lecimy przejscia wg. FOLLOW
+                        for (String s : followSet.get(stateItem.getProduction().getLeftSide())) {
+                            array.addAction(dfaState.getId(), s, "red" + grammar.getProdNumber(stateItem.getProduction()));
                         }
                     }
                 }
