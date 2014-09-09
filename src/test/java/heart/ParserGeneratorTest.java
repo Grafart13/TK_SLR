@@ -1,10 +1,11 @@
-package heart;
+package test.java.heart;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.*;
+import main.java.heart.*;
 
 /**
  * @author Mateusz Drożdż

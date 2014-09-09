@@ -1,4 +1,4 @@
-package heart;
+package test.java.heart;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import main.java.heart.*;
 
 /**
  * seems to be working but more tests are needed

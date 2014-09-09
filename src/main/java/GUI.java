@@ -1,10 +1,10 @@
-import heart.Grammar;
+package main.java;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import main.java.heart.*;
 /**
  * Created by dpjar_000 on 2014-06-13.
  */
@@ -14,6 +14,7 @@ public class GUI extends JFrame {
     JTabbedPane tabbedPane;
     JPanel panel1;
     JTextArea grammarIn;
+    JTextArea grammarOut;
     Button simulate_button;
 
     JPanel panel2;
@@ -26,7 +27,9 @@ public class GUI extends JFrame {
     JTextArea simulatedOut;
     Button parse_button;
 
-    ActionListener al = new ActionListener() {
+    Grammar grammar;
+
+    public ActionListener al = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == parse_button) {
@@ -35,9 +38,17 @@ public class GUI extends JFrame {
                 Start algorithm of  generate parsing rules
                  */
 
-//                Grammar grammar = new Grammar();
                 String text = grammarIn.getText();
-//                grammar.parseAll(text);
+                try {
+
+                    GrammarParser gp = new GrammarParser();
+                    grammar = gp.parse(text);
+                    System.out.println("Getting grammar from textArea...");
+                    grammarOut.append(grammar.toString());
+
+                } catch (Exception exc) {
+                    System.out.println(exc.getStackTrace());
+                }
 
             } else if (e.getSource() == simulate_button) {
                 System.out.println("Starting simulating algorithm...");
@@ -69,19 +80,30 @@ public class GUI extends JFrame {
         tabbedPane.addTab("Parsing table", panel3);
         tabbedPane.addTab("Simulate parsing", panel4);
 
-        panel1.setLayout(new BorderLayout(10, 10));
+        panel1.setLayout(new BorderLayout(10,10));
         //panel1.add(new JLabel("Welcome in our SLR(1) Parsing Simulator!"), BorderLayout.NORTH);
-        panel1.add(new JLabel("Welcome in our SLR(1) Parsing Simulator!", SwingConstants.CENTER), BorderLayout.PAGE_START);
+        JPanel panel11 = new JPanel();
+        panel11.setLayout(new GridLayout(2,1));
+        panel11.add(new JLabel("Welcome in our SLR(1) Parsing Simulator!", SwingConstants.CENTER));
+        panel11.add(new JLabel("Please enter the grammar below (left text area) and click 'Generate Parsing!' button.", SwingConstants.CENTER));
+
+        panel1.add(panel11, BorderLayout.PAGE_START);
         JPanel panel10 = new JPanel();
-        panel10.setLayout(new BorderLayout(10, 10));
+        panel10.setLayout(new GridLayout(1,2,10,10));
+        panel10.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
         grammarIn = new JTextArea();
-        panel10.add(new JLabel("Please enter the grammar below and click 'Generate Parsing!' button."), BorderLayout.PAGE_START);
-        panel10.add(grammarIn, BorderLayout.CENTER);
-        simulate_button = new Button("Generate Parsing!");
-        simulate_button.setSize(250, 150);
-        simulate_button.addActionListener(al);
-        panel10.add(simulate_button, BorderLayout.PAGE_END); // what's a stupid border loyout! Resize my button  :(
+        grammarIn.setVisible(true);
+        panel10.add(grammarIn);
+        grammarOut = new JTextArea();
+        grammarOut.setVisible(true);
+        grammarOut.setEditable(false);
+        panel10.add(grammarOut);
+        parse_button = new Button("Generate Parsing!");
+        parse_button.setSize(250, 150);
+        parse_button.addActionListener(al);
         panel1.add(panel10, BorderLayout.CENTER);
+        panel1.add(parse_button, BorderLayout.PAGE_END); // what's a stupid border loyout! Resize my button  :(
+
 
         gotoOut = new JTextArea();
         gotoOut.setEditable(false);
@@ -98,8 +120,8 @@ public class GUI extends JFrame {
         wordIn = new JTextField();
         simulatedOut = new JTextArea();
         simulatedOut.setEditable(false);
-        parse_button = new Button("Simulate parsing!");
-        parse_button.addActionListener(al);
+        simulate_button = new Button("Simulate parsing!");
+        simulate_button.addActionListener(al);
 
         panel4.setLayout(new BorderLayout(10, 10));
         panel4.add(new JLabel("Write word in below and click 'Simulate parsing!' button"), BorderLayout.PAGE_START);
@@ -108,7 +130,7 @@ public class GUI extends JFrame {
         JPanel panel41 = new JPanel();
         panel41.setLayout(new GridLayout(1, 2));
         panel41.add(wordIn);
-        panel41.add(parse_button);
+        panel41.add(simulate_button);
         panel40.add(panel41, BorderLayout.PAGE_START);
         panel40.add(simulatedOut, BorderLayout.CENTER);
         panel4.add(panel40, BorderLayout.CENTER);

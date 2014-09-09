@@ -1,4 +1,4 @@
-package heart;
+package main.java.heart;
 
 import java.util.List;
 
@@ -45,6 +45,20 @@ public class Grammar {
 
     public int getProdNumber(Production production) {
         return prods.lastIndexOf(production);
+    }
+
+    public String toString() {
+        String result = "";
+
+        int i = 0;
+        for (Production p : prods) {
+            result += "(" + i + ")";
+            result += p.toStringShow();
+            result += "\n";
+            i++;
+        }
+
+        return result;
     }
 
 }

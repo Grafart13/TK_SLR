@@ -1,4 +1,4 @@
-package heart;
+package test.java.heart;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import main.java.heart.*;
 
 /**
  * @author Mateusz Drożdż

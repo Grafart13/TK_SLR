@@ -1,4 +1,4 @@
-package heart;
+package main.java.heart;
 
 /**
  * StateItem == An LR(0) item of a grammar G

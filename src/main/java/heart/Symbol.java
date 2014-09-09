@@ -1,4 +1,4 @@
-package heart;
+package main.java.heart;
 
 /**
  * Created by dpjar_000 on 2014-06-14.

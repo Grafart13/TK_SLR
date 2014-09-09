@@ -1,4 +1,4 @@
-package heart;
+package main.java.heart;
 
 import java.util.*;
 

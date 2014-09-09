@@ -1,3 +1,5 @@
+//package main.java;
+
 import java.awt.*;
 
 public class Main {
@@ -6,7 +8,7 @@ public class Main {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new GUI();
+                new main.java.GUI();
             }
         });
     }

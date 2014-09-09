@@ -1,4 +1,4 @@
-package heart;
+package main.java.heart;
 
 /**
  * @author Mateusz Drożdż

@@ -1,4 +1,4 @@
-package heart;
+package main.java.heart;
 
 import java.util.List;
 import java.util.Map;
@@ -33,6 +33,17 @@ public class Production {
                 "leftSide='" + leftSide + '\'' +
                 ", rightSide=" + rightSide +
                 '}';
+    }
+
+    public String toStringShow() {
+        String result = "";
+        result = leftSide + "->";
+
+        for (String a : rightSide) {
+            result += a;
+        }
+
+        return result;
     }
 
     @Override
