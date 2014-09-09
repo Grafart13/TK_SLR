@@ -1,11 +1,13 @@
-package test.java.heart;
+package java.heart;
 
+import main.java.heart.Grammar;
+import main.java.heart.Production;
+import main.java.heart.StateItem;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
-import main.java.heart.*;
 
 /**
  * @author Mateusz Drożdż
