@@ -323,7 +323,7 @@ public class ParserGenerator {
                        // szukamy GOTO dla naszego stanu przez symbol po kropce
                     for (DFAState stateTmp : states) {
                         if (!stateTmp.getState().isEmpty() && symbolAfterDot.equals(stateTmp.symbol()) && stateTmp.containsInFrom(dfaState.getId(), symbolAfterDot)) {
-                            array.addAction(dfaState.getId(), symbolAfterDot, "T_" + stateTmp.getId());
+                            array.addAction(dfaState.getId(), symbolAfterDot, new Action(ActionType.GOTO, stateTmp.getId()));
                         }
                     }
                 }
@@ -338,7 +338,7 @@ public class ParserGenerator {
                     for (DFAState stateTmp : states) {
                         if (!stateTmp.getState().isEmpty() && symbolAfterDot.equals(stateTmp.symbol()) && stateTmp.containsInFrom(dfaState.getId(), symbolAfterDot)) {
                             // add shift
-                            array.addAction(dfaState.getId(), symbolAfterDot, "sh" + stateTmp.getId());
+                            array.addAction(dfaState.getId(), symbolAfterDot, new Action(ActionType.SHIFT, stateTmp.getId()));
                         }
                     }
                 }
@@ -351,11 +351,11 @@ public class ParserGenerator {
                 if (StateItem.END.equals(symbolAfterDot)) {
                     // jesli red do 0 == acc
                     if (grammar.getProdNumber(stateItem.getProduction()) == 0) {
-                        array.addAction(dfaState.getId(), Grammar.DOLLAR, "acc");
+                        array.addAction(dfaState.getId(), Grammar.DOLLAR, new Action(ActionType.ACCEPT, 0));
                     } else {
                         // lecimy przejscia wg. FOLLOW
                         for (String s : followSet.get(stateItem.getProduction().getLeftSide())) {
-                            array.addAction(dfaState.getId(), s, "red" + grammar.getProdNumber(stateItem.getProduction()));
+                            array.addAction(dfaState.getId(), s, new Action(ActionType.REDUCE, grammar.getProdNumber(stateItem.getProduction())));
                         }
                     }
                 }
