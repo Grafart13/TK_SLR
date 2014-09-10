@@ -1,4 +1,4 @@
-package main.java.heart;
+package heart;
 
 import java.util.Arrays;
 import java.util.HashSet;

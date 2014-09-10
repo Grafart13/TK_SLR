@@ -1,4 +1,4 @@
-package main.java.heart;
+package heart;
 
 import java.util.List;
 import java.util.Map;
@@ -55,7 +55,7 @@ public class Production {
 
         if (!leftSide.equals(that.leftSide)) return false;
         if (rightSide.size() != that.rightSide.size()) return false;
-        for (int i=0; i<rightSide.size(); i++) {
+        for (int i = 0; i < rightSide.size(); i++) {
             if (!rightSide.get(i).equals(that.rightSide.get(i))) return false;
         }
 
@@ -104,7 +104,7 @@ public class Production {
 //        }
 //    }
 
-    public void setPointPosition (int i) {
+    public void setPointPosition(int i) {
         this.pointPosition = i;
     }
 
@@ -112,18 +112,18 @@ public class Production {
         return left;
     }
 
-    public Map<Integer,Symbol> getRight() {
+    public Map<Integer, Symbol> getRight() {
         return right;
     }
 
-    public int getPointPosition () {
+    public int getPointPosition() {
         return pointPosition;
     }
 
     public boolean isEqual(Production prod) {
         if (!left.isEqual(prod.getLeft()))
-           return false;
-        int i=0;
+            return false;
+        int i = 0;
         if (prod.getRight().size() != right.size()) {
             return false;
         }
@@ -131,7 +131,7 @@ public class Production {
         List<Symbol> right2_v = (List<Symbol>) prod.getRight().values();
         List<Symbol> right_v = (List<Symbol>) getRight().values();
 
-        while (i<max) {
+        while (i < max) {
             Symbol sym = right_v.get(i);
             Symbol sym2 = right2_v.get(i);
             if (!sym.isEqual(sym2)) {

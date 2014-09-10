@@ -1,10 +1,10 @@
-package main.java;
+import heart.Grammar;
+import heart.GrammarParser;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import main.java.heart.*;
 /**
  * Created by dpjar_000 on 2014-06-13.
  */
@@ -90,7 +90,7 @@ public class GUI extends JFrame {
         panel1.add(panel11, BorderLayout.PAGE_START);
         JPanel panel10 = new JPanel();
         panel10.setLayout(new GridLayout(1,2,10,10));
-        panel10.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+        panel10.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         grammarIn = new JTextArea();
         grammarIn.setVisible(true);
         panel10.add(grammarIn);

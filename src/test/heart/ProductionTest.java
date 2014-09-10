@@ -1,6 +1,5 @@
-package java.heart;
+package heart;
 
-import main.java.heart.Production;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

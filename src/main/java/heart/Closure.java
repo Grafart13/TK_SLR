@@ -1,4 +1,4 @@
-package main.java.heart;
+package heart;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -29,8 +29,7 @@ public class Closure {
         if (result.equals(itemsSet)) {
 
             return result;
-        }
-        else {
+        } else {
             return produce(result);
         }
     }

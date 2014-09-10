@@ -1,4 +1,4 @@
-package main.java.heart;
+package heart;
 
 import java.util.*;
 
@@ -179,7 +179,7 @@ public class ParserGenerator {
         do {
             itemAdded = false;
             for (Production production : grammar.getProds()) {
-                for (int i=0; i<production.getRightSide().size(); i++) {
+                for (int i = 0; i < production.getRightSide().size(); i++) {
                     String nonterminal = production.getRightSide().get(i);
 
                     // ommiting terminals and epsilon
@@ -187,7 +187,7 @@ public class ParserGenerator {
                         continue;
                     }
 
-                    if (i == production.getRightSide().size() - 1 || firstOfWord(production.getRightSide().subList(i+1, production.getRightSide().size()), firsts).contains(Grammar.EPSILON)) {
+                    if (i == production.getRightSide().size() - 1 || firstOfWord(production.getRightSide().subList(i + 1, production.getRightSide().size()), firsts).contains(Grammar.EPSILON)) {
                         for (String item : result.get(production.getLeftSide())) {
                             if (!result.get(nonterminal).contains(item)) {
                                 result.get(nonterminal).add(item);
@@ -197,7 +197,7 @@ public class ParserGenerator {
                     }
 
                     if (i < production.getRightSide().size()) {
-                        for (String item : firstOfWord(production.getRightSide().subList(i+1, production.getRightSide().size()), firsts)) {
+                        for (String item : firstOfWord(production.getRightSide().subList(i + 1, production.getRightSide().size()), firsts)) {
                             if (!item.equals(Grammar.EPSILON) && !result.get(nonterminal).contains(item)) {
                                 result.get(nonterminal).add(item);
                                 itemAdded = true;
@@ -214,7 +214,7 @@ public class ParserGenerator {
 
     /**
      * Defn: Goto(I,X), where I is a set of items, X is a terminal or non-terminal, is the
-     closure(A -> a X . b) where A -> a . X b is in I.
+     * closure(A -> a X . b) where A -> a . X b is in I.
      */
 
     // TODO: maybe move to other (new?) class;
@@ -280,7 +280,7 @@ public class ParserGenerator {
                     // collect distinct sets of states (if newState is different than prev)
                     if (!newGotoSet.getState().isEmpty() && dfaStates.add(newDfaState)) {
                         // debug
-                        System.out.println("  add: " + counter  + ":  GOTO(" + prevState.getState() + ", " + symbol + ") = " + newGotoSet.getState());
+                        System.out.println("  add: " + counter + ":  GOTO(" + prevState.getState() + ", " + symbol + ") = " + newGotoSet.getState());
                         //---
                         newDfaState.addFromId(prevState.getId(), symbol);
                         //---
@@ -320,7 +320,7 @@ public class ParserGenerator {
             for (StateItem stateItem : dfaState.getState()) {
                 String symbolAfterDot = stateItem.getSymbolAfterDot();
                 if (grammar.getNonterminals().contains(symbolAfterDot)) {
-                       // szukamy GOTO dla naszego stanu przez symbol po kropce
+                    // szukamy GOTO dla naszego stanu przez symbol po kropce
                     for (DFAState stateTmp : states) {
                         if (!stateTmp.getState().isEmpty() && symbolAfterDot.equals(stateTmp.symbol()) && stateTmp.containsInFrom(dfaState.getId(), symbolAfterDot)) {
                             array.addAction(dfaState.getId(), symbolAfterDot, new Action(ActionType.GOTO, stateTmp.getId()));

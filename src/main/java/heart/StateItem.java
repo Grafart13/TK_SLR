@@ -1,4 +1,4 @@
-package main.java.heart;
+package heart;
 
 /**
  * StateItem == An LR(0) item of a grammar G
@@ -38,7 +38,7 @@ public class StateItem {
         this.dotPosition = dotPosition;
     }
 
-    public String getSymbolAfterDot(){
+    public String getSymbolAfterDot() {
         if (dotPosition < production.getRightSide().size()) return production.getRightSide().get(dotPosition);
         else return END;
     }

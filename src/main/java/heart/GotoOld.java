@@ -1,4 +1,4 @@
-package main.java.heart;
+package heart;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +25,13 @@ public class GotoOld {
         // How?
 
         List<Production> anotherProductionList = anotherGotoOld.getProductionList();
-        int i=0;
+        int i = 0;
         if (anotherProductionList.size() != productionList.size()) {
             System.out.println("Different set of goto");
             return false;
         }
         int max = productionList.size();
-        while (i < max ) {
+        while (i < max) {
             Production prod = productionList.get(i);
             Production prod2 = anotherProductionList.get(i);
             if (!prod2.isEqual(prod)) {

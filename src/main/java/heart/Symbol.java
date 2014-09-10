@@ -1,4 +1,4 @@
-package main.java.heart;
+package heart;
 
 /**
  * Created by dpjar_000 on 2014-06-14.
@@ -18,7 +18,7 @@ public class Symbol {
     }
   */
 
-    public Symbol (String _sign) {
+    public Symbol(String _sign) {
         if (Character.isUpperCase(_sign.charAt(0))) {
             this.type = Type.NONTERMINAL;
         } else {
@@ -30,11 +30,11 @@ public class Symbol {
             System.out.println("Wrong symbol.");
     }
 
-    public String toString () {
+    public String toString() {
         return sign;
     }
 
-    public boolean isNonterminal () {
+    public boolean isNonterminal() {
         return type == Type.NONTERMINAL ? true : false;
     }
 
@@ -45,6 +45,7 @@ public class Symbol {
     public Type getType() {
         return type;
     }
+
     public boolean isEqual(Symbol sym) {
         if (sign.equals(sym.getSign()) && type == sym.getType()) {
             return true;

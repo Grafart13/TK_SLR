@@ -1,4 +1,4 @@
-package main.java.heart;
+package heart;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,9 +42,9 @@ public class GrammarParser {
             // productionSides[1] - after -> sing.
 
             // trimming
-           for (int i=0; i<productionSides.length; i++) {
-            productionSides[i] = productionSides[i].trim();
-           }
+            for (int i = 0; i < productionSides.length; i++) {
+                productionSides[i] = productionSides[i].trim();
+            }
 
             // getting nonterminals
             nonterminals.add(productionSides[0]); // -----
@@ -62,7 +62,7 @@ public class GrammarParser {
             String[] rightSides = productionSides[1].split("\\" + Grammar.NEXT_PROD);
 
             // trimming
-            for (int i=0; i<rightSides.length; i++) {
+            for (int i = 0; i < rightSides.length; i++) {
                 rightSides[i] = rightSides[i].trim();
             }
 
@@ -91,7 +91,7 @@ public class GrammarParser {
 
     // todo: test for " " occurence or sth. similar
     private void generateProductions() throws Exception {
-        for (int i=0; i<nonterminals.size(); i++) {
+        for (int i = 0; i < nonterminals.size(); i++) {
             for (String rightSide : prodRightSides.get(i)) {
                 Production production = new Production(nonterminals.get(i), Arrays.asList(rightSide.split(" ")));
                 if (productions.contains(production)) {
