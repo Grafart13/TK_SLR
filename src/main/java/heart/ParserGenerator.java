@@ -31,6 +31,32 @@ public class ParserGenerator {
         return firstSet;
     }
 
+    public String firstToString() {
+        String result = "";
+        for (String key : firstSet.keySet()) {
+            result += key + " : ";
+            for (String a : firstSet.get(key)) {
+                result += a + " , ";
+            }
+            result+= "\n";
+        }
+
+        return result;
+    }
+
+    public String followToString() {
+        String result = "";
+        for (String key : followSet.keySet()) {
+            result += key + " : ";
+            for (String a : followSet.get(key)) {
+                result += a + " , ";
+            }
+            result+= "\n";
+        }
+
+        return result;
+    }
+
     public Map<String, Set<String>> getFollowSet() {
         return followSet;
     }

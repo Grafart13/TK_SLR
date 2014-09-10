@@ -1,5 +1,6 @@
 import heart.Grammar;
 import heart.GrammarParser;
+import heart.ParserGenerator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,6 +21,7 @@ public class GUI extends JFrame {
     JPanel panel2;
     JTextArea gotoOut;
     JTextArea followOut;
+    JTextArea firstOut;
     JPanel panel3;
     JPanel panel4;
 
@@ -49,6 +51,14 @@ public class GUI extends JFrame {
                 } catch (Exception exc) {
                     System.out.println(exc.getStackTrace());
                 }
+
+                ParserGenerator pg = new ParserGenerator(grammar);
+                System.out.println("Displaying set of FIRST...");
+                firstOut.append(pg.firstToString());
+                System.out.println("Displaying set of FOLLOW(1)...");
+                followOut.append(pg.followToString());
+
+
 
             } else if (e.getSource() == simulate_button) {
                 System.out.println("Starting simulating algorithm...");
@@ -81,7 +91,6 @@ public class GUI extends JFrame {
         tabbedPane.addTab("Simulate parsing", panel4);
 
         panel1.setLayout(new BorderLayout(10,10));
-        //panel1.add(new JLabel("Welcome in our SLR(1) Parsing Simulator!"), BorderLayout.NORTH);
         JPanel panel11 = new JPanel();
         panel11.setLayout(new GridLayout(2,1));
         panel11.add(new JLabel("Welcome in our SLR(1) Parsing Simulator!", SwingConstants.CENTER));
@@ -110,10 +119,40 @@ public class GUI extends JFrame {
         gotoOut.setSize(400, 300);
         followOut = new JTextArea();
         followOut.setEditable(false);
+        firstOut = new JTextArea();
+        firstOut.setEditable(false);
+
         panel2.setLayout(new BorderLayout(10, 10));
-        panel2.add(new JLabel("Generated set of GOTO and FOLLOW(1)"), BorderLayout.PAGE_START);
-        panel2.add(gotoOut, BorderLayout.CENTER);
-        panel2.add(followOut, BorderLayout.LINE_END);
+        panel2.add(new JLabel("Generated set of GOTO, FIRST and FOLLOW(1)", SwingConstants.CENTER), BorderLayout.PAGE_START);
+        JPanel panel20 = new JPanel();
+        panel20.setLayout(new GridLayout(1, 2, 10, 10));
+        panel20.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        JPanel panel20left = new JPanel();
+        panel20left.setLayout(new BorderLayout(5,5));
+        panel20left.add(new JLabel("Set of GOTO", SwingConstants.HORIZONTAL), BorderLayout.PAGE_START);
+        panel20left.add(gotoOut, BorderLayout.CENTER);
+
+        JPanel panel20right = new JPanel();
+        panel20right.setLayout(new GridLayout(2,1,5,5));
+
+        JPanel panel20right_up = new JPanel();
+        panel20right_up.setLayout(new BorderLayout(5,5));
+        panel20right_up.add(new JLabel("Set of FOLLOW(1)", SwingConstants.HORIZONTAL), BorderLayout.PAGE_START);
+        panel20right_up.add(followOut, BorderLayout.CENTER);
+
+        JPanel panel20right_down = new JPanel();
+        panel20right_down.setLayout(new BorderLayout(5,5));
+        panel20right_down.add(new JLabel("Set of FIRST", SwingConstants.HORIZONTAL), BorderLayout.PAGE_START);
+        panel20right_down.add(firstOut, BorderLayout.CENTER);
+
+        panel20right.add(panel20right_up);
+        panel20right.add(panel20right_down);
+
+        panel20.add(panel20left);
+        panel20.add(panel20right);
+
+        panel2.add(panel20,BorderLayout.CENTER);
+
 
         // parsing table - how represent it?
 
