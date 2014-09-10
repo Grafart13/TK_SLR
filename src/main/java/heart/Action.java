@@ -13,6 +13,14 @@ public class Action {
         this.state = state;
     }
 
+    public ActionType getType() {
+        return type;
+    }
+
+    public int getState() {
+        return state;
+    }
+
     @Override
     public String toString() {
         String s = null;

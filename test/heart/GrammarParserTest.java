@@ -23,7 +23,7 @@ public class GrammarParserTest {
     public void testParseNo1() throws Exception {
         // given
         String input = "S -> S + A\n" +
-                        "A -> *";
+                "A -> *";
         //todo: change results type to set
 //        List<String> nonterminals = Arrays.asList("S", "A");
         List<String> nonterminals = Arrays.asList("S", "A", "S'");
@@ -44,8 +44,8 @@ public class GrammarParserTest {
     public void testParseNo2() throws Exception {
         // given
         String input = "S -> a A | b B | A S B\n" +
-                       "A -> A b | eps\n" +
-                       "B -> B a | eps";
+                "A -> A b | eps\n" +
+                "B -> B a | eps";
 
 //        List<String> nonterminals = Arrays.asList("S", "A", "B");
         List<String> nonterminals = Arrays.asList("S", "A", "B", "S'");
@@ -94,7 +94,6 @@ public class GrammarParserTest {
 
         // when
         Grammar grammar = grammarParser.parse(input);
-
 
 
     }
