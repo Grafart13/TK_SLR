@@ -26,8 +26,8 @@ public class ParserGeneratorTest {
                 "Two -> b";
 
         String input2 = "S -> S*\n" +
-                        "S -> a(S)\n" +
-                        "S -> a";
+                "S -> a(S)\n" +
+                "S -> a";
 
         grammar = grammarParser.parse(input);
 
@@ -188,7 +188,7 @@ public class ParserGeneratorTest {
         // then
         System.out.println("--- DFA EX2 ---");
         for (DFAState state : states) {
-            System.out.println("  " + state.getId() + ": "  + state.getState());
+            System.out.println("  " + state.getId() + ": " + state.getState());
         }
         System.out.println("--- /DFA EX2 ---");
     }

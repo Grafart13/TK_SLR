@@ -40,7 +40,7 @@ public class ParserArray {
         return false;
     }
 
-    private Action getAction(int stateId, String symbol) {
+    public Action getAction(int stateId, String symbol) {
         for (ActionTriple actionTriple : array) {
             if (stateId == actionTriple.stateId && symbol.equals(actionTriple.symbol)) {
                 return actionTriple.action;
