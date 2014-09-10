@@ -62,4 +62,15 @@ public class DFAState {
     public int hashCode() {
         return gotoState != null ? gotoState.hashCode() : 0;
     }
+
+    public String toString() {
+        String result = "";
+        result += "T" + id + " = " ;
+        for (int from : fromIdMap.keySet()) {
+            result += "GOTO(T" + from +"," + fromIdMap.get(from) + ") = ";
+        }
+
+        result += gotoState.toString();
+        return result;
+    }
 }

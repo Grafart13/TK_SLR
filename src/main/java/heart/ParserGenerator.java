@@ -338,6 +338,17 @@ public class ParserGenerator {
         return dfaStates;
     }
 
+    public String DFAStatesToString (Grammar grammar) {
+        String result = "";
+        Set<DFAState> states = computeDFAStates(grammar);
+
+        for (DFAState state : states) {
+            result += state.toString() + "\n";
+        }
+
+        return result;
+    }
+
     public ParserArray generateParserArrayAnother(List<DFAState> states) {
         ParserArray array = new ParserArray();
 

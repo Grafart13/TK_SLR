@@ -57,4 +57,14 @@ public class Goto {
     public int hashCode() {
         return state != null ? state.hashCode() : 0;
     }
+
+    public String toString() {
+        String result = "";
+        result +=  "{";
+        for (StateItem si : state) {
+            result += "[" + si.toString() + "], ";
+        }
+        result += "}";
+        return result;
+    }
 }

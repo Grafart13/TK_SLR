@@ -16,6 +16,10 @@ public class GUI extends JFrame {
     JPanel panel1;
     JTextArea grammarIn;
     JTextArea grammarOut;
+
+
+    Button parse_button;
+    Button clear_button;
     Button simulate_button;
 
     JPanel panel2;
@@ -27,14 +31,23 @@ public class GUI extends JFrame {
 
     JTextField wordIn;
     JTextArea simulatedOut;
-    Button parse_button;
+
 
     Grammar grammar;
 
+    private void clear() {
+        grammarOut.setText("");
+        gotoOut.setText("");
+        followOut.setText("");
+        firstOut.setText("");
+        gotoOut.setText("");
+    }
     public ActionListener al = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == parse_button) {
+                System.out.println("Clearing...");
+                clear();
                 System.out.println("Starting generate parsing algorithm...");
                 /*
                 Start algorithm of  generate parsing rules
@@ -46,7 +59,7 @@ public class GUI extends JFrame {
                     GrammarParser gp = new GrammarParser();
                     grammar = gp.parse(text);
                     System.out.println("Getting grammar from textArea...");
-                    grammarOut.append(grammar.toString());
+                    grammarOut.setText(grammar.toString());
 
                 } catch (Exception exc) {
                     System.out.println(exc.getStackTrace());
@@ -54,11 +67,16 @@ public class GUI extends JFrame {
 
                 ParserGenerator pg = new ParserGenerator(grammar);
                 System.out.println("Displaying set of FIRST...");
-                firstOut.append(pg.firstToString());
+                firstOut.setText(pg.firstToString());
                 System.out.println("Displaying set of FOLLOW(1)...");
-                followOut.append(pg.followToString());
+                followOut.setText(pg.followToString());
+
+                gotoOut.setText(pg.DFAStatesToString(grammar));
 
 
+            } else if ( e.getSource() == clear_button) {
+                grammarIn.setText("");
+                clear();
 
             } else if (e.getSource() == simulate_button) {
                 System.out.println("Starting simulating algorithm...");
@@ -98,7 +116,7 @@ public class GUI extends JFrame {
 
         panel1.add(panel11, BorderLayout.PAGE_START);
         JPanel panel10 = new JPanel();
-        panel10.setLayout(new GridLayout(1,2,10,10));
+        panel10.setLayout(new GridLayout(1, 2, 10, 10));
         panel10.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         grammarIn = new JTextArea();
         grammarIn.setVisible(true);
@@ -107,11 +125,18 @@ public class GUI extends JFrame {
         grammarOut.setVisible(true);
         grammarOut.setEditable(false);
         panel10.add(grammarOut);
+        panel1.add(panel10, BorderLayout.CENTER);
+
         parse_button = new Button("Generate Parsing!");
         parse_button.setSize(250, 150);
         parse_button.addActionListener(al);
-        panel1.add(panel10, BorderLayout.CENTER);
-        panel1.add(parse_button, BorderLayout.PAGE_END); // what's a stupid border loyout! Resize my button  :(
+
+        clear_button = new Button("Clear");
+        clear_button.addActionListener(al);
+        JPanel panel12 = new JPanel();
+        panel12.add(parse_button);
+        panel12.add(clear_button);
+        panel1.add(panel12, BorderLayout.PAGE_END); // what's a stupid border loyout! Resize my button  :(
 
 
         gotoOut = new JTextArea();
