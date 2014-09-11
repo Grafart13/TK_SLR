@@ -44,6 +44,8 @@ public class ParserSymulator {
             String symbol = lastStep.getInputSymbol();
             Action action = parserArray.getAction(prod, symbol);
 
+            System.out.println(prod + " : " + symbol + " : " + action );
+
             if (action.getType() == ActionType.ACCEPT) {
                 accepted = true;
             }

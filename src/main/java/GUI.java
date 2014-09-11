@@ -3,6 +3,8 @@ import heart.GrammarParser;
 import heart.ParserArray;
 import heart.ParserGenerator;
 import heart.DFAState;
+import heart.symulator.ParseStep;
+import heart.symulator.ParserSymulator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.List;
 
 /**
  * Created by dpjar_000 on 2014-06-13.
@@ -39,6 +42,7 @@ public class GUI extends JFrame {
 
 
     Grammar grammar;
+    ParserArray parserArray;
 
     private void clear() {
         grammarOut.setText("");
@@ -81,12 +85,10 @@ public class GUI extends JFrame {
                 // parsing array
                 System.out.println("Displaying parsing array...");
                 Set<DFAState> dfaStateSet = pg.computeDFAStates(grammar);
-                ParserArray parserArray = pg.generateParserArrayAnother(new ArrayList<DFAState>(dfaStateSet));
+                parserArray = pg.generateParserArrayAnother(new ArrayList<DFAState>(dfaStateSet));
 
                 int column_size = grammar.getTerminals().size() + grammar.getNonterminals().size() + 2;
                 String []columnNames = new String[column_size]; //  one column is empty, one is $
-                String [][] data = new String[dfaStateSet.size()][column_size];
-
 
                 MyTableModel mtm = new MyTableModel(column_size, dfaStateSet.size());
                 System.out.println("Column size " + column_size + "States size " + dfaStateSet.size() + grammar.getNonterminals() + grammar.getTerminals());
@@ -125,9 +127,33 @@ public class GUI extends JFrame {
 
             } else if (e.getSource() == simulate_button) {
                 System.out.println("Starting simulating algorithm...");
-                /*
-                Start Algorithm of simulate parsing a word
-                 */
+
+                if (grammar == null) {
+                    System.out.println("There's no grammar in...");
+                    panel4.add(new JLabel("There's no grammar in.", SwingConstants.HORIZONTAL), BorderLayout.PAGE_END);
+                } else {
+                    ParserSymulator parserSymulator = new ParserSymulator(grammar,parserArray);
+                    String word = wordIn.getText();
+                    System.out.println(word);
+                    try {
+                        List<ParseStep> parseStepList = parserSymulator.parse(word);
+                        System.out.println(parseStepList.size());
+
+                        MyTableModel mtm_simulate = new MyTableModel(3, parseStepList.size());
+                        String[] columnNames_sim ={ "Stack", "Input", "Production"};
+                        mtm_simulate.setColumnNames(columnNames_sim);
+                        mtm_simulate.setData(parseStepList);
+                        JTable table_sim = new JTable(mtm_simulate);
+
+                        JScrollPane scrollPane_sim = new JScrollPane(table_sim);
+
+                        panel4.add(scrollPane_sim, BorderLayout.CENTER);
+                    } catch (NullPointerException exc) {
+                        panel4.add(new JLabel("Word cannot by parsed", SwingConstants.HORIZONTAL), BorderLayout.PAGE_END);
+                    }
+
+
+                }
 
             }
         }
@@ -244,7 +270,7 @@ public class GUI extends JFrame {
         panel41.add(wordIn);
         panel41.add(simulate_button);
         panel40.add(panel41, BorderLayout.PAGE_START);
-        panel40.add(simulatedOut, BorderLayout.CENTER);
+        //panel40.add(simulatedOut, BorderLayout.CENTER);
         panel4.add(panel40, BorderLayout.CENTER);
 
 

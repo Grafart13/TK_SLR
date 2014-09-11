@@ -1,8 +1,11 @@
 import heart.ParserArray;
 import heart.Symbol;
+import heart.symulator.ParseStep;
+import heart.symulator.StackItem;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -58,6 +61,33 @@ public class MyTableModel extends AbstractTableModel {
                 }
             }
         }
+    }
+
+    public void setData( List<ParseStep> parseStepList) {
+
+        int i=0;
+        for (ParseStep ps : parseStepList) {
+            String stack = "";
+            String input = "";
+            String prods = "";
+
+            for (StackItem si : ps.getStack()) {
+                stack += si.toString();
+            }
+            for (String in : ps.getInput()) {
+                in += in;
+            }
+            for (String p : ps.getProds()) {
+                prods += p;
+            }
+
+            data[0][i] = stack;
+            data[1][i] = input;
+            data[2][i] = prods;
+            i++;
+        }
+
+
     }
 
     @Override
