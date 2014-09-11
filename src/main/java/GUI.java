@@ -1,11 +1,16 @@
 import heart.Grammar;
 import heart.GrammarParser;
+import heart.ParserArray;
 import heart.ParserGenerator;
+import heart.DFAState;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Set;
+
 /**
  * Created by dpjar_000 on 2014-06-13.
  */
@@ -72,6 +77,46 @@ public class GUI extends JFrame {
                 followOut.setText(pg.followToString());
 
                 gotoOut.setText(pg.DFAStatesToString(grammar));
+
+                // parsing array
+                System.out.println("Displaying parsing array...");
+                Set<DFAState> dfaStateSet = pg.computeDFAStates(grammar);
+                ParserArray parserArray = pg.generateParserArrayAnother(new ArrayList<DFAState>(dfaStateSet));
+
+                int column_size = grammar.getTerminals().size() + grammar.getNonterminals().size() + 2;
+                String []columnNames = new String[column_size]; //  one column is empty, one is $
+                String [][] data = new String[dfaStateSet.size()][column_size];
+
+
+                MyTableModel mtm = new MyTableModel(column_size, dfaStateSet.size());
+                System.out.println("Column size " + column_size + "States size " + dfaStateSet.size() + grammar.getNonterminals() + grammar.getTerminals());
+
+                columnNames[0] = " ";
+                int i = 1;
+                for (String terminal : grammar.getTerminals()) {
+                    columnNames[i] = terminal;
+                    i++;
+                }
+                columnNames[i] = "$";
+                i++;
+
+                for (String nonterminal : grammar.getNonterminals() ) {
+                    columnNames[i] = nonterminal;
+                    i++;
+                }
+                mtm.setColumnNames(columnNames);
+                mtm.setData(parserArray);
+
+                JTable table = new JTable(mtm);
+
+                JScrollPane scrollPane = new JScrollPane(table);
+
+                if (parserArray.conflictExist()) {
+                    System.out.println("Conflict exist...");
+                    panel3.add(new JLabel("Conflict exist. It is not SLR(1) grammar.", SwingConstants.HORIZONTAL), BorderLayout.PAGE_END);
+                }
+
+                panel3.add(scrollPane, BorderLayout.CENTER);
 
 
             } else if ( e.getSource() == clear_button) {
@@ -180,6 +225,9 @@ public class GUI extends JFrame {
 
 
         // parsing table - how represent it?
+        panel3.setLayout(new BorderLayout(10,10));
+        panel3.add(new JLabel("Parsing table", SwingConstants.CENTER), BorderLayout.PAGE_START);
+
 
         wordIn = new JTextField();
         simulatedOut = new JTextArea();
